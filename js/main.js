@@ -37,18 +37,35 @@ function init() {
 
     const obj = new PIXI.Graphics();
     const obj2 = new PIXI.Graphics();
-
-    let p1 = [200, 300];
+    //[Derecha,Abajo]
+    //Lado del cuadrado = 200 =>
+    let p1 = [227, 400];
     let p2 = [400, 500];
     let p3 = [400, 700];
-
+    let p4 = [600, 700];
+    let p5 = [600, 500];
+    let p6 = [773, 400];
+    let p7 = [673, 227];
+    let p8 = [500, 327];
+    let p9 = [327, 227];
+    let p10= [227, 400];
+    
     // Rectangle
     obj.lineStyle(4, 0xffd900, 1);
     obj.moveTo(p1[0], p1[1]);
     obj.lineTo(p2[0], p2[1]);
     obj.lineTo(p3[0], p3[1]);
+    obj.lineTo(p4[0], p4[1]);
+    obj.lineTo(p5[0], p5[1]);
+    obj.lineTo(p6[0], p6[1]);
+    obj.lineTo(p7[0], p7[1]);
+    obj.lineTo(p8[0], p8[1]);
+    obj.lineTo(p9[0], p9[1]);
+    obj.lineTo(p10[0], p10[1]);
+    
+    
 
-    let shpObj = [p1,p2,p3];
+    let shpObj = [p1,p2,p3,p4,p5,p6,p7,p8,p9,p10];
 
     let normals = calculeNormals(shpObj);
 
