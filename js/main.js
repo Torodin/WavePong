@@ -33,8 +33,50 @@ function init() {
     modifi.vMod = 1.5;
     app.stage.addChild(modifi);
 
+    //----------Prueba normales muros---------------
+
+    const obj = new PIXI.Graphics();
+    const obj2 = new PIXI.Graphics();
+
+    let p1 = [200, 300];
+    let p2 = [400, 500];
+    let p3 = [400, 700];
+
+    // Rectangle
+    obj.lineStyle(4, 0xffd900, 1);
+    obj.moveTo(p1[0], p1[1]);
+    obj.lineTo(p2[0], p2[1]);
+    obj.lineTo(p3[0], p3[1]);
+
+    let shpObj = [p1,p2,p3];
+
+    let normals = calculeNormals(shpObj);
+
+    normals.forEach(normal => {
+        obj2.lineStyle(4, 0xff0088, 1);
+        
+        console.log(normal);
+
+        obj2.moveTo(
+            normal.center[0],
+            normal.center[1]
+        );
+
+        obj2.lineTo(
+            normal.vector[0],
+            normal.vector[1]
+        );
+    });
+
+    console.log(normals);
+
+    app.stage.addChild(obj);
+    app.stage.addChild(obj2);
+
+    //----------------------------------------------
+
     //Asignamos las teclas y sus funciones
-    //keys = keyAsignation(keys, pelota);
+    keys = keyAsignation(keys, pelota);
 
     //Iniciamos y ejecutamos el estado de juego
     state = play;

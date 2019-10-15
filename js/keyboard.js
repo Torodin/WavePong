@@ -41,10 +41,10 @@ class Key {
         window.removeEventListener("keyup", this.upHandler);
     }
 }
-/*
+
 function keyAsignation(keys, pelota) {
     keys.kUp.press = () => {
-        pelota.vy = -pelota.vBase;
+        pelota.vy = -pelota.v;
     }
     
     keys.kUp.release = () => {
@@ -52,7 +52,7 @@ function keyAsignation(keys, pelota) {
     }
     
     keys.kDown.press = () => {
-        pelota.vy = pelota.vBase;
+        pelota.vy = pelota.v;
     }
     
     keys.kDown.release = () => {
@@ -60,7 +60,7 @@ function keyAsignation(keys, pelota) {
     }
     
     keys.kLeft.press = () => {
-        pelota.vx = -pelota.vBase;
+        pelota.vx = -pelota.v;
     }
     
     keys.kLeft.release = () => {
@@ -68,7 +68,7 @@ function keyAsignation(keys, pelota) {
     }
     
     keys.kRight.press = () => {
-        pelota.vx = pelota.vBase;
+        pelota.vx = pelota.v;
     }
     
     keys.kRight.release = () => {
@@ -76,4 +76,4 @@ function keyAsignation(keys, pelota) {
     }
 
     return keys;
-}*/
+}
