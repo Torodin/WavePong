@@ -1,10 +1,4 @@
-let app = new PIXI.Application({
-    width: window.innerWidth,
-    height: window.innerHeight,
-});
-document.body.appendChild(app.view);
-
-let pelota, modifi, state;
+let pelota, modifi, walls;
 
 let keys = {
     'kUp': new Key('ArrowUp'),
@@ -14,7 +8,7 @@ let keys = {
 }
 
 function init() {
-    //Carga los sprites
+    /*Carga los sprites
     pelota = new PIXI.Sprite.from('./sprites/pelota.png');
     pelota.anchor.set(0.5);
     pelota.x = app.screen.width/2;
@@ -26,94 +20,120 @@ function init() {
     pelota.vMod = 0;
     app.stage.addChild(pelota);
 
+    pelota.rig = new Circulo(pelota.x,pelota.y,5);
+
     modifi = new PIXI.Sprite.from('./sprites/plus.png');
     modifi.anchor.set(0.5);
     modifi.x = Math.floor(Math.random() * app.screen.width);
     modifi.y = Math.floor(Math.random() * app.screen.height);
     modifi.vMod = 1.5;
-    app.stage.addChild(modifi);
-
-    //----------Prueba normales muros---------------
-
-    const obj = new PIXI.Graphics();
-    const obj2 = new PIXI.Graphics();
-    //[Derecha,Abajo]
-    //Lado del cuadrado = 200 =>
-    let p1 = [227, 400];
-    let p2 = [400, 500];
-    let p3 = [400, 700];
-    let p4 = [600, 700];
-    let p5 = [600, 500];
-    let p6 = [773, 400];
-    let p7 = [673, 227];
-    let p8 = [500, 327];
-    let p9 = [327, 227];
-    let p10= [227, 400];
+    app.stage.addChild(modifi);*/
     
-    // Rectangle
-    obj.lineStyle(4, 0xffd900, 1);
-    obj.moveTo(p1[0], p1[1]);
-    obj.lineTo(p2[0], p2[1]);
-    obj.lineTo(p3[0], p3[1]);
-    obj.lineTo(p4[0], p4[1]);
-    obj.lineTo(p5[0], p5[1]);
-    obj.lineTo(p6[0], p6[1]);
-    obj.lineTo(p7[0], p7[1]);
-    obj.lineTo(p8[0], p8[1]);
-    obj.lineTo(p9[0], p9[1]);
-    obj.lineTo(p10[0], p10[1]);
+    /*var shpObj = [
+        [540, 350],
+        [800, 500],
+        [800, 800],
+        [1100, 800],
+        [1100, 500],
+        [1360, 350],
+        [1210, 90],
+        [950, 240],
+        [690, 90],
+        [540, 350]
+    ];*/
+
     
-    
-
-    let shpObj = [p1,p2,p3,p4,p5,p6,p7,p8,p9,p10];
-
-    let normals = calculeNormals(shpObj);
-
-    normals.forEach(normal => {
-        obj2.lineStyle(4, 0xff0088, 1);
-        
-        console.log(normal);
-
-        obj2.moveTo(
-            normal.center[0],
-            normal.center[1]
-        );
-
-        obj2.lineTo(
-            normal.vector[0],
-            normal.vector[1]
-        );
-    });
-
-    console.log(normals);
-
-    app.stage.addChild(obj);
-    app.stage.addChild(obj2);
-
-    //----------------------------------------------
 
     //Asignamos las teclas y sus funciones
     keys = keyAsignation(keys, pelota);
-
-    //Iniciamos y ejecutamos el estado de juego
-    state = play;
-
-    app.ticker.add((delta) => mainLoop(delta));
 }
 
-function mainLoop(delta) {
-    state(delta);
-}
+// module aliases
+var Engine = Matter.Engine,
+    Render = Matter.Render,
+    World = Matter.World,
+    Bodies = Matter.Bodies;
+    Body = Matter.Body;
 
-function play(delta) {
-    if (hitTestRectangle(pelota, modifi)) {
-        pelota.vMod = modifi.vMod;
+// create an engine
+var engine = Engine.create();
 
-        app.stage.removeChild(modifi);
+// create a renderer
+var render = Render.create({
+    element: document.body,
+    engine: engine,
+    options: {
+        width: window.innerWidth,
+        height: window.innerHeight,
+        wireframes: false,
+        showAngleIndicator: true,
+        showVelocity: true
     }
-    
-    pelota.x += (pelota.vx + pelota.vx * pelota.vMod) * delta;
-    pelota.y += (pelota.vy + pelota.vy * pelota.vMod) * delta;
+});
+
+engine.world.gravity.y = 0;
+
+walls = [
+    [540, 350],
+    [800, 500],
+    [800, 800],
+    [1100, 800],
+    [1100, 500],
+    [1360, 350],
+    [1210, 90],
+    [950, 240],
+    [690, 90],
+];
+
+let angle = [-1.05,0,1.57,0,1.05,-0.52,1.05,-1.05,0.52];
+
+let wallsMedio = [];
+for (var i=0; i<walls.length; i++) {
+    let nextInd = (i==walls.length-1)? 0:i+1;
+
+    wallsMedio.push([
+        (walls[i][0]+walls[nextInd][0])/2,
+        (walls[i][1]+walls[nextInd][1])/2,
+    ]);
 }
 
-init();
+let wallsWorld = [];
+
+for(var i=0; i<wallsMedio.length; i++) {
+    let tmp = Bodies.rectangle(wallsMedio[i][0], wallsMedio[i][1], 10, 305, 
+        {
+            isStatic:true,
+            render: {
+                fillStyle: 'blue'
+            }
+        }
+    );
+    Body.rotate(tmp, angle[i]);
+
+    wallsWorld.push(tmp);
+}
+
+World.add(engine.world, wallsWorld);
+
+let bola = Bodies.circle(950,500,16,
+    {
+        inertia: 0,
+        friction: 0,
+        frictionStatic: 0,
+        frictionAir: 0,
+        restitution: 1,
+        render: {
+            fillStyle: 'red'
+        }
+    }
+);
+
+Body.setVelocity(bola, Matter.Vector.create(4,4));
+
+World.add(engine.world, bola);
+
+// run the engine
+Engine.run(engine);
+
+// run the renderer
+Render.run(render);
