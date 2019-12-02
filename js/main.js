@@ -1,59 +1,36 @@
 let pelota, modifi, walls;
 
-let keys = {
+// Modulos de matter
+const Engine = Matter.Engine,
+    Render = Matter.Render,
+    World = Matter.World,
+    Bodies = Matter.Bodies,
+    Body = Matter.Body,
+    Events = Matter.Events;
+
+/*let keys = {
     'kUp': new Key('ArrowUp'),
     'kDown': new Key('ArrowDown'),
     'kLeft': new Key('ArrowLeft'),
     'kRight': new Key('ArrowRight')
-}
+}*/
 
-function init() {
-    /*Carga los sprites
-    pelota = new PIXI.Sprite.from('./sprites/pelota.png');
-    pelota.anchor.set(0.5);
-    pelota.x = app.screen.width/2;
-    pelota.y = app.screen.height/2;
-    pelota.vMax = 3;
-    pelota.v = Math.random() < 0.5 ? -pelota.vMax : pelota.vMax;
-    pelota.vx = pelota.v * Math.random();
-    pelota.vy = pelota.v - pelota.vx;
-    pelota.vMod = 0;
-    app.stage.addChild(pelota);
+// Caracteristicas objetos
+const PLANK_HEGHT = 10;
+const PLANK_WIDTH = 305;
+const PLANK_VEL = 3;
 
-    pelota.rig = new Circulo(pelota.x,pelota.y,5);
-
-    modifi = new PIXI.Sprite.from('./sprites/plus.png');
-    modifi.anchor.set(0.5);
-    modifi.x = Math.floor(Math.random() * app.screen.width);
-    modifi.y = Math.floor(Math.random() * app.screen.height);
-    modifi.vMod = 1.5;
-    app.stage.addChild(modifi);*/
-    
-    /*var shpObj = [
-        [540, 350],
-        [800, 500],
-        [800, 800],
-        [1100, 800],
-        [1100, 500],
-        [1360, 350],
-        [1210, 90],
-        [950, 240],
-        [690, 90],
-        [540, 350]
-    ];*/
-
-    
-
-    //Asignamos las teclas y sus funciones
-    keys = keyAsignation(keys, pelota);
-}
-
-// module aliases
-var Engine = Matter.Engine,
-    Render = Matter.Render,
-    World = Matter.World,
-    Bodies = Matter.Bodies;
-    Body = Matter.Body;
+const WALLS = [
+    [540, 350],
+    [800, 500],
+    [800, 800],
+    [1100, 800],
+    [1100, 500],
+    [1360, 350],
+    [1210, 90],
+    [950, 240],
+    [690, 90],
+];
 
 // create an engine
 var engine = Engine.create();
@@ -73,42 +50,34 @@ var render = Render.create({
 
 engine.world.gravity.y = 0;
 
-walls = [
-    [540, 350],
-    [800, 500],
-    [800, 800],
-    [1100, 800],
-    [1100, 500],
-    [1360, 350],
-    [1210, 90],
-    [950, 240],
-    [690, 90],
-];
+let velTot = 6;
 
 let angle = [-1.05,0,1.57,0,1.05,-0.52,1.05,-1.05,0.52];
 
 let wallsMedio = [];
-for (var i=0; i<walls.length; i++) {
-    let nextInd = (i==walls.length-1)? 0:i+1;
+for (var i=0; i<WALLS.length; i++) {
+    let nextInd = (i==WALLS.length-1)? 0:i+1;
 
     wallsMedio.push([
-        (walls[i][0]+walls[nextInd][0])/2,
-        (walls[i][1]+walls[nextInd][1])/2,
+        (WALLS[i][0]+WALLS[nextInd][0])/2,
+        (WALLS[i][1]+WALLS[nextInd][1])/2,
     ]);
 }
 
 let wallsWorld = [];
 
 for(var i=0; i<wallsMedio.length; i++) {
-    let tmp = Bodies.rectangle(wallsMedio[i][0], wallsMedio[i][1], 10, 305, 
+    let tmp = Bodies.rectangle(wallsMedio[i][0], wallsMedio[i][1], PLANK_HEGHT, PLANK_WIDTH, 
         {
             isStatic:true,
+            chamfer: { radius: 3 },
+            angle: angle[i],
             render: {
                 fillStyle: 'blue'
             }
         }
     );
-    Body.rotate(tmp, angle[i]);
+    //Body.rotate(tmp, angle[i]);
 
     wallsWorld.push(tmp);
 }
@@ -117,6 +86,7 @@ World.add(engine.world, wallsWorld);
 
 let bola = Bodies.circle(950,500,16,
     {
+        label: 'Pelota',
         inertia: 0,
         friction: 0,
         frictionStatic: 0,
@@ -128,9 +98,58 @@ let bola = Bodies.circle(950,500,16,
     }
 );
 
-Body.setVelocity(bola, Matter.Vector.create(4,4));
+let paleta = Bodies.rectangle(950, 750, 10, 75, 
+    {
+        label: 'Paleta',
+        isStatic: true,
+        angle: 1.57,
+        render: {
+            fillStyle: 'red'
+        }
+    }
+);
+
+Events.on(engine, 'collisionStart', event => {
+    let pairs = event.pairs;
+    
+    for (var i = 0, j = pairs.length; i != j; ++i) {
+        let pair = pairs[i];
+
+        if(pair.bodyB.label == 'Paleta' || pair.bodyA.label == 'Paleta'){
+            console.log('Colisión paleta');
+        }
+    }
+});
+
+Events.on(engine, 'collisionEnd', event => {
+    let pairs = event.pairs;
+
+    for (var i = 0, j = pairs.length; i != j; ++i) {
+        let pair = pairs[i];
+        velTot+=(velTot >= 10)?0.5:0;
+
+        if(pair.bodyA.label == 'Pelota'){
+            Body.setVelocity(pair.bodyA, Matter.Vector.create(
+                pair.bodyA.velocity.x,
+                ((pair.bodyB.velocity.y>0)?1:-1)*Math.sqrt(velTot**2-pair.bodyA.velocity.x**2)
+            ));
+        } else {
+            Body.setVelocity(pair.bodyB, Matter.Vector.create(
+                pair.bodyB.velocity.x,
+                ((pair.bodyB.velocity.y>0)?1:-1)*Math.sqrt(velTot**2-pair.bodyB.velocity.x**2)                
+            ));
+        }
+    }
+});
+
+let velX = Math.random()*(velTot*2+1)-velTot;
+Body.setVelocity(bola, Matter.Vector.create(
+    velX,
+    ((Math.random()>0.5)?1:-1)*Math.sqrt(velTot**2-velX**2)
+));
 
 World.add(engine.world, bola);
+World.add(engine.world, paleta);
 
 // run the engine
 Engine.run(engine);
