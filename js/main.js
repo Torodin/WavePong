@@ -1,19 +1,15 @@
-let pelota, modifi, walls;
-
 // Modulos de matter
 const Engine = Matter.Engine,
-    Render = Matter.Render,
     World = Matter.World,
     Bodies = Matter.Bodies,
-    Body = Matter.Body,
-    Events = Matter.Events;
+    Body = Matter.Body;
 
-/*let keys = {
+let keys = {
     'kUp': new Key('ArrowUp'),
     'kDown': new Key('ArrowDown'),
     'kLeft': new Key('ArrowLeft'),
     'kRight': new Key('ArrowRight')
-}*/
+}
 
 // Caracteristicas objetos
 const PLANK_HEGHT = 10;
@@ -32,25 +28,23 @@ const WALLS = [
     [690, 90],
 ];
 
+let velTot = 6;
+
 // create an engine
-var engine = Engine.create();
+let engine = Engine.create();
 
 // create a renderer
-var render = Render.create({
+var render = CustomRender.create({
     element: document.body,
     engine: engine,
     options: {
         width: window.innerWidth,
         height: window.innerHeight,
-        wireframes: false,
-        showAngleIndicator: true,
-        showVelocity: true
+        wireframes: false
     }
 });
 
 engine.world.gravity.y = 0;
-
-let velTot = 6;
 
 let angle = [-1.05,0,1.57,0,1.05,-0.52,1.05,-1.05,0.52];
 
@@ -84,7 +78,7 @@ for(var i=0; i<wallsMedio.length; i++) {
 
 World.add(engine.world, wallsWorld);
 
-let bola = Bodies.circle(950,500,16,
+var bola = Bodies.circle(950,500,16,
     {
         label: 'Pelota',
         inertia: 0,
@@ -98,16 +92,36 @@ let bola = Bodies.circle(950,500,16,
     }
 );
 
-let paleta = Bodies.rectangle(950, 750, 10, 75, 
+var paleta = Bodies.rectangle(950, 750, 10, 75, 
     {
         label: 'Paleta',
         isStatic: true,
         angle: 1.57,
+        moving: 0,
         render: {
             fillStyle: 'red'
         }
     }
 );
+
+var puntos = 0;
+
+var puntuacion = Bodies.rectangle(950, 900, 1, 1, 
+    {
+        label: "Contador",
+        isStatic: true,
+        render: {
+            fillStyle: "red",
+            text: {
+                content: `Puntuación ${puntos}`,
+                color: "#FFFFFF",
+                size: 20
+            }
+        }
+    }
+);
+
+keyAsignation(keys, paleta);
 
 Events.on(engine, 'collisionStart', event => {
     let pairs = event.pairs;
@@ -117,6 +131,8 @@ Events.on(engine, 'collisionStart', event => {
 
         if(pair.bodyB.label == 'Paleta' || pair.bodyA.label == 'Paleta'){
             console.log('Colisión paleta');
+            puntos++;
+            Composite.allBodies(engine.world).find(el => el.label == 'Contador').render.text.content = `Puntuación ${puntos}`;
         }
     }
 });
@@ -126,7 +142,8 @@ Events.on(engine, 'collisionEnd', event => {
 
     for (var i = 0, j = pairs.length; i != j; ++i) {
         let pair = pairs[i];
-        velTot+=(velTot >= 10)?0.5:0;
+
+        if((pair.bodyB.label == 'Paleta' || pair.bodyA.label == 'Paleta') && velTot <= 16) velTot+=0.5;
 
         if(pair.bodyA.label == 'Pelota'){
             Body.setVelocity(pair.bodyA, Matter.Vector.create(
@@ -142,17 +159,20 @@ Events.on(engine, 'collisionEnd', event => {
     }
 });
 
+Events.on(engine, 'beforeUpdate', event => {
+    Body.setPosition(paleta, Vector.add(paleta.position, Vector.create(PLANK_VEL*paleta.moving,0)));
+});
+
 let velX = Math.random()*(velTot*2+1)-velTot;
-Body.setVelocity(bola, Matter.Vector.create(
+Body.setVelocity(bola, Vector.create(
     velX,
     ((Math.random()>0.5)?1:-1)*Math.sqrt(velTot**2-velX**2)
 ));
 
-World.add(engine.world, bola);
-World.add(engine.world, paleta);
+World.add(engine.world, [bola, paleta, puntuacion]);
 
 // run the engine
 Engine.run(engine);
 
 // run the renderer
-Render.run(render);
+CustomRender.run(render);

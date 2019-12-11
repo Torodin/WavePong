@@ -42,37 +42,21 @@ class Key {
     }
 }
 
-function keyAsignation(keys, pelota) {
-    keys.kUp.press = () => {
-        pelota.vy = -pelota.v;
-    }
-    
-    keys.kUp.release = () => {
-        pelota.vy = 0;
-    }
-    
-    keys.kDown.press = () => {
-        pelota.vy = pelota.v;
-    }
-    
-    keys.kDown.release = () => {
-        pelota.vy = 0;
-    }
-    
+function keyAsignation(keys, paleta) {
     keys.kLeft.press = () => {
-        pelota.vx = -pelota.v;
+        paleta.moving = -1;
     }
     
     keys.kLeft.release = () => {
-        pelota.vx = 0;
+        paleta.moving = 0;
     }
     
     keys.kRight.press = () => {
-        pelota.vx = pelota.v;
+        paleta.moving = 1;
     }
     
     keys.kRight.release = () => {
-        pelota.vx = 0;
+        paleta.moving = 0;
     }
 
     return keys;
