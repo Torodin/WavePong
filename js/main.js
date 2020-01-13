@@ -160,7 +160,10 @@ Events.on(engine, 'collisionEnd', event => {
 });
 
 Events.on(engine, 'beforeUpdate', event => {
-    Body.setPosition(paleta, Vector.add(paleta.position, Vector.create(PLANK_VEL*paleta.moving,0)));
+    console.log(paleta.position.x);
+
+    if( (paleta.position.x>=830 || ) && (paleta.position.x<=1000 || paleta.moving==-1) ) 
+        Body.setPosition(paleta, Vector.add(paleta.position, Vector.create(PLANK_VEL*paleta.moving,0)));
 });
 
 let velX = Math.random()*(velTot*2+1)-velTot;
