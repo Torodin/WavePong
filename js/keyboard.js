@@ -43,19 +43,19 @@ class Key {
 }
 
 function keyAsignation(keys, paleta) {
-    keys.kLeft.press = () => {
+    keys.k1.press = () => {
         paleta.moving = -1;
     }
     
-    keys.kLeft.release = () => {
+    keys.k1.release = () => {
         paleta.moving = 0;
     }
     
-    keys.kRight.press = () => {
+    keys.k2.press = () => {
         paleta.moving = 1;
     }
     
-    keys.kRight.release = () => {
+    keys.k2.release = () => {
         paleta.moving = 0;
     }
 
