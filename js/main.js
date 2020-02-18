@@ -347,7 +347,7 @@ function moveAngle(position, vel, angle) {
     return Vector.add( Vector.rotate( Vector.create(0,-vel), angle ), position );
 }
 
-setRandVel(bola, velTot);
+//setRandVel(bola, velTot);
 
 World.add(engine.world, [bola, paleta, paleta2, paleta3, puntuacionJ1, puntuacionJ2, puntuacionJ3]);
 
@@ -356,3 +356,8 @@ Engine.run(engine);
 
 // run the renderer
 CustomRender.run(render);
+
+// Socket.io
+var socket = io();
+
+socket.on('full', (v) => Body.setVelocity( bola, Vector.create(v.x, v.y) ) );
