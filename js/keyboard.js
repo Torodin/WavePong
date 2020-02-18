@@ -61,3 +61,9 @@ function keyAsignation(keys, paleta) {
 
     return keys;
 }
+
+function otherKeys(key, pelota) {
+    key.k1.press = () => {
+        bodies.body.isStatic = bodies.body.isStatic ? false:true;
+    }
+}

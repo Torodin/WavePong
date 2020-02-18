@@ -25,14 +25,14 @@ const TEXT_COLOR = '#E900FF';
 // Caracteristicas pelota
 const PELOTA_RAD = 16;
 const PELOTA_POS_INI = [950,430];
-const PELOTA_MIN_VEL = 5.7;
+const PELOTA_MIN_VEL = 5.8;
 const PELOTA_MAX_VEL = 10;
 const PELOTA_COLOR = '#F52789';
 
 // Caracteristicas paleta
 const PLANK_HEGHT = 10;
 const PLANK_WIDTH = 305;
-const PLANK_VEL = 3.5;
+const PLANK_VEL = 3.6;
 const PLANK_COLOR = '#FAEB2C';
 
 // Los muros y porterias
@@ -53,7 +53,8 @@ const WALL_COLOR = '#1685F8';
 const PORT_COLOR = '#F52789';
 
 let velTot = 6;
-let ultimoGolpe = null;
+let ultimoGolpe = -1;
+let puntuaciones = [0,0,0];
 
 // create an engine
 let engine = Engine.create();
@@ -86,19 +87,42 @@ for (var i=0; i<WALLS.length; i++) {
 }
 
 let wallsWorld = [];
+let wallJ = 0;
 
 for(var i=0; i<wallsMedio.length; i++) {
-    let tmp = Bodies.rectangle(wallsMedio[i][0], wallsMedio[i][1], PLANK_HEGHT, PLANK_WIDTH, 
-        {
-            label: ( PORTERIAS.includes(i) ? 'porteria':'muro' ),
-            isStatic:true,
-            chamfer: { radius: 3 },
-            angle: angle[i],
-            render: {
-                fillStyle: ( PORTERIAS.includes(i) ? PORT_COLOR:WALL_COLOR )
+    let tmp;
+
+    if(PORTERIAS.includes(i)) {
+        tmp = Bodies.rectangle(wallsMedio[i][0], wallsMedio[i][1], PLANK_HEGHT, PLANK_WIDTH, 
+            {
+                label: 'porteria',
+                jugador: wallJ,
+                isStatic:true,
+                chamfer: { radius: 3 },
+                angle: angle[i],
+                render: {
+                    fillStyle: PORT_COLOR
+                }
             }
-        }
-    );
+        );
+
+        wallJ++;
+
+    } else {
+        tmp = Bodies.rectangle(wallsMedio[i][0], wallsMedio[i][1], PLANK_HEGHT, PLANK_WIDTH, 
+            {
+                label: 'muro',
+                isStatic:true,
+                chamfer: { radius: 3 },
+                angle: angle[i],
+                render: {
+                    fillStyle: WALL_COLOR
+                }
+            }
+        );
+    }
+
+    
     //Body.rotate(tmp, angle[i]);
 
     wallsWorld.push(tmp);
@@ -114,6 +138,7 @@ var bola = Bodies.circle(PELOTA_POS_INI[0],PELOTA_POS_INI[1],PELOTA_RAD,
         frictionStatic: 0,
         frictionAir: 0,
         restitution: 1,
+        pause: true,
         render: {
             fillStyle: PELOTA_COLOR
         }
@@ -131,8 +156,6 @@ var paleta = Bodies.rectangle(950, 750, 10, 75,
         }
     }
 );
-
-//var posPal2 = Vector.add( Vector.rotate( Vector.create(0,-50), -2.35 ), Vector.create(1285, 220) );
 
 var posPal2 = moveAngle( Vector.create(1285, 220), 53, -2.35 );
 var paleta2 = Bodies.rectangle(posPal2.x, posPal2.y, 10, 75, 
@@ -160,16 +183,44 @@ var paleta3 = Bodies.rectangle(posPal3.x, posPal3.y, 10, 75,
     }
 );
 
-var puntos = 0;
-
-var puntuacion = Bodies.rectangle(950, 900, 1, 1, 
+var puntuacionJ1 = Bodies.rectangle(950, 850, 1, 1, 
     {
-        label: "Contador",
+        label: "cont1",
         isStatic: true,
         render: {
             fillStyle: "red",
             text: {
-                content: `Puntuación ${puntos}`,
+                content: `Puntuación Jugador1: ${puntuaciones[0]}`,
+                color: TEXT_COLOR,
+                size: 20
+            }
+        }
+    }
+);
+
+var puntuacionJ2 = Bodies.rectangle(950, 880, 1, 1, 
+    {
+        label: "cont2",
+        isStatic: true,
+        render: {
+            fillStyle: "red",
+            text: {
+                content: `Puntuación Jugador2: ${puntuaciones[1]}`,
+                color: TEXT_COLOR,
+                size: 20
+            }
+        }
+    }
+);
+
+var puntuacionJ3 = Bodies.rectangle(950, 910, 1, 1, 
+    {
+        label: "cont3",
+        isStatic: true,
+        render: {
+            fillStyle: "red",
+            text: {
+                content: `Puntuación Jugador3: ${puntuaciones[2]}`,
                 color: TEXT_COLOR,
                 size: 20
             }
@@ -188,10 +239,20 @@ Events.on(engine, 'collisionStart', event => {
         let pair = pairs[i];
 
         // Si la pelota choca con una porteria añadimos puntos
-        if(pair.bodyB.label == 'porteria' || pair.bodyA.label == 'porteria'){
-            puntos++;
-            Composite.allBodies(engine.world).find(el => el.label == 'Contador').render.text.content = `Puntuación ${puntos}`;
-            
+        if(pair.bodyA.label == 'porteria'){
+            if(ultimoGolpe!=-1) {
+                if(pair.bodyA.jugador==ultimoGolpe) {
+                    puntuaciones[ultimoGolpe]-= puntuaciones[ultimoGolpe]>0 ? 1:0;
+                } else {
+                    puntuaciones[ultimoGolpe]++;
+                }
+
+                ultimoGolpe = -1;
+                Composite.allBodies(engine.world).find(el => el.label == 'cont1').render.text.content = `Puntuación Jugador1: ${puntuaciones[0]}`;
+                Composite.allBodies(engine.world).find(el => el.label == 'cont2').render.text.content = `Puntuación Jugador2: ${puntuaciones[1]}`;
+                Composite.allBodies(engine.world).find(el => el.label == 'cont3').render.text.content = `Puntuación Jugador3: ${puntuaciones[2]}`;
+            }
+
             if(pair.bodyA.label == 'Pelota') {
                 Body.setPosition(pair.bodyA, Vector.create(PELOTA_POS_INI[0], PELOTA_POS_INI[1]));
                 velTot = PELOTA_MIN_VEL;
@@ -212,7 +273,26 @@ Events.on(engine, 'collisionEnd', event => {
         let pair = pairs[i];
 
         // Si la pelota choca con una paleta se incrementa su velocidad
-        if( (pair.bodyB.label.includes('paleta') || pair.bodyA.label.includes('paleta') ) && velTot <= PELOTA_MAX_VEL) velTot+=0.5;
+        if( (pair.bodyB.label.includes('paleta') ) && velTot <= PELOTA_MAX_VEL ) {
+            let labelLength = pair.bodyB.label.length;
+
+            switch(pair.bodyB.label.substring(labelLength-1, labelLength)) {
+                case "1":
+                    ultimoGolpe = 0;
+                    break;
+                case "2":
+                    ultimoGolpe = 1;
+                    break;
+                case "3":
+                    ultimoGolpe = 2;
+                    break;
+            }
+
+            velTot+=0.5;
+
+        } else if( pair.bodyA.label.includes('paleta') && velTot <= PELOTA_MAX_VEL ) {
+
+        }
 
         // Ajustamos la velocidad de la pelota para que no reducca la velocidad
         if(pair.bodyA.label == 'Pelota'){
@@ -269,7 +349,7 @@ function moveAngle(position, vel, angle) {
 
 setRandVel(bola, velTot);
 
-World.add(engine.world, [bola, paleta, paleta2, paleta3, puntuacion]);
+World.add(engine.world, [bola, paleta, paleta2, paleta3, puntuacionJ1, puntuacionJ2, puntuacionJ3]);
 
 // run the engine
 Engine.run(engine);
