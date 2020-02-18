@@ -3,7 +3,6 @@
 
 [![NPM Version][npm-image]][npm-url]
 [![Build Status][travis-image]][travis-url]
-[![Downloads Stats][npm-downloads]][npm-url]
 
 Se trata de una versión del clasico Pong que consiste en que ahora en lugar de 2 es para 3 jugadores y a su vez la forma tambien cambia.
 
