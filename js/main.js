@@ -4,6 +4,9 @@ const Engine = Matter.Engine,
     Bodies = Matter.Bodies,
     Body = Matter.Body;
 
+const socket = io();
+let idJugador = 0;
+
 let keys = {
     'k1': new Key('ArrowLeft'),
     'k2': new Key('ArrowRight')
@@ -253,6 +256,7 @@ Events.on(engine, 'collisionStart', event => {
                 Composite.allBodies(engine.world).find(el => el.label == 'cont3').render.text.content = `Puntuación Jugador3: ${puntuaciones[2]}`;
             }
 
+            /*
             if(pair.bodyA.label == 'Pelota') {
                 Body.setPosition(pair.bodyA, Vector.create(PELOTA_POS_INI[0], PELOTA_POS_INI[1]));
                 velTot = PELOTA_MIN_VEL;
@@ -262,6 +266,7 @@ Events.on(engine, 'collisionStart', event => {
                 velTot = PELOTA_MIN_VEL;
                 setRandVel(bola, velTot);
             }
+            */
         }
     }
 });
@@ -289,22 +294,28 @@ Events.on(engine, 'collisionEnd', event => {
             }
 
             velTot+=0.5;
-
-        } else if( pair.bodyA.label.includes('paleta') && velTot <= PELOTA_MAX_VEL ) {
-
         }
 
         // Ajustamos la velocidad de la pelota para que no reducca la velocidad
         if(pair.bodyA.label == 'Pelota'){
-            Body.setVelocity(pair.bodyA, Matter.Vector.create(
-                pair.bodyA.velocity.x,
-                ((pair.bodyA.velocity.y>0)?1:-1)*Math.sqrt(velTot**2-pair.bodyA.velocity.x**2)
-            ));
+            let newVel = {
+                x:pair.bodyA.velocity.x,
+                y:( pair.bodyA.velocity.y>0 ? 1:-1 )*Math.sqrt(velTot**2-pair.bodyA.velocity.x**2),
+                id:idJugador
+            }
+
+            socket.emit('colision', newVel);
+            Body.setVelocity(pair.bodyA, Matter.Vector.create( newVel.x, newVel.y ));
+
         } else {
-            Body.setVelocity(pair.bodyB, Matter.Vector.create(
-                pair.bodyB.velocity.x,
-                ((pair.bodyB.velocity.y>0)?1:-1)*Math.sqrt(velTot**2-pair.bodyB.velocity.x**2)                
-            ));
+            let newVel = {
+                x:pair.bodyB.velocity.x,
+                y:( pair.bodyB.velocity.y>0 ? 1:-1 )*Math.sqrt(velTot**2-pair.bodyB.velocity.x**2),
+                id:idJugador
+            }
+
+            socket.emit('colision', newVel);
+            Body.setVelocity(pair.bodyB, Matter.Vector.create( newVel.x, newVel.y ));
         }
 
 
@@ -358,6 +369,21 @@ Engine.run(engine);
 CustomRender.run(render);
 
 // Socket.io
-var socket = io();
+socket.on('succes-conn', id => { 
+    console.log("hola");
+    if(idJugador == 0) {
+        idJugador = id;
+        console.log(idJugador);
+    }
+});
 
-socket.on('full', (v) => Body.setVelocity( bola, Vector.create(v.x, v.y) ) );
+socket.on('sync-call', newVel => {
+    Body.setVelocity( bola, Matter.Vector.create( newVel.x, newVel.y ) );
+});
+
+socket.on('full', v => {
+    Body.setVelocity( bola, Vector.create(v.x, v.y) ) 
+    console.log(`Vel set to: x-${v.x} y-${v.y} | Bola vel: x-${bola.velocity.x} y-${bola.velocity.y}`);
+});
+
+socket.on('hola', () => console.log("hola"));
