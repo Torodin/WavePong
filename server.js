@@ -63,10 +63,10 @@ io.on('connection', socket => {
         partidas[ultimaPartida].playing = true;
     }
 
-    socket.on('colision', data => {
-        if(data.id == 1) {
-            console.log(`Sync x-${data.x} y-${data.y}`);
-            socket.emit('sync-call', { x:data.x, y:data.y } );
+    socket.on('colision', (vel,pos) => {
+        if(vel.id == 1) {
+            console.log(`Sync vx->${vel.x} vy->${vel.y} | px->${pos.x} py->${pos.y}`);
+            socket.to(partidas[partidaAsignada].nombre).emit('sync-call', { x:vel.x, y:vel.y }, { x:pos.x, y:pos.y });
         }
     });
 

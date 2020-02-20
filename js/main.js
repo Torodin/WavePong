@@ -2,7 +2,8 @@
 const Engine = Matter.Engine,
     World = Matter.World,
     Bodies = Matter.Bodies,
-    Body = Matter.Body;
+    Body = Matter.Body,
+    Runner = Matter.Runner;
 
 const socket = io();
 let idJugador = 0;
@@ -12,6 +13,7 @@ let keys = {
     'k2': new Key('ArrowRight')
 }
 
+/*
 let keys2 = {
     'k1': new Key('j'),
     'k2': new Key('l')
@@ -21,6 +23,7 @@ let keys3 = {
     'k1': new Key('a'),
     'k2': new Key('d')
 }
+*/
 
 const BACK_COLOR = '#3D144C';
 const TEXT_COLOR = '#E900FF';
@@ -31,6 +34,8 @@ const PELOTA_POS_INI = [950,430];
 const PELOTA_MIN_VEL = 5.8;
 const PELOTA_MAX_VEL = 10;
 const PELOTA_COLOR = '#F52789';
+
+let velTot = 6;
 
 // Caracteristicas paleta
 const PLANK_HEGHT = 10;
@@ -52,23 +57,29 @@ const WALLS = [
     [950, 240],
     [690, 90],
 ];
+
 const WALL_COLOR = '#1685F8';
 const PORT_COLOR = '#F52789';
 
-let velTot = 6;
+// Caracteristicas para la puntiacion
 let ultimoGolpe = -1;
 let puntuaciones = [0,0,0];
 
 // create an engine
 let engine = Engine.create();
+let runner = Runner.create({
+    isFixed: true
+});
+
+engine.timing.isFixed = true;
 
 // create a renderer
 var render = CustomRender.create({
     element: document.body,
     engine: engine,
     options: {
-        width: window.innerWidth,
-        height: window.innerHeight,
+        width: 1905,//window.innerWidth,
+        height: 935,//window.innerHeight,
         background: BACK_COLOR,
         wireframes: false
     }
@@ -124,9 +135,6 @@ for(var i=0; i<wallsMedio.length; i++) {
             }
         );
     }
-
-    
-    //Body.rotate(tmp, angle[i]);
 
     wallsWorld.push(tmp);
 }
@@ -231,10 +239,6 @@ var puntuacionJ3 = Bodies.rectangle(950, 910, 1, 1,
     }
 );
 
-keyAsignation(keys, paleta);
-keyAsignation(keys2, paleta2);
-keyAsignation(keys3, paleta3);
-
 Events.on(engine, 'collisionStart', event => {
     let pairs = event.pairs;
     
@@ -256,7 +260,7 @@ Events.on(engine, 'collisionStart', event => {
                 Composite.allBodies(engine.world).find(el => el.label == 'cont3').render.text.content = `Puntuación Jugador3: ${puntuaciones[2]}`;
             }
 
-            /*
+            
             if(pair.bodyA.label == 'Pelota') {
                 Body.setPosition(pair.bodyA, Vector.create(PELOTA_POS_INI[0], PELOTA_POS_INI[1]));
                 velTot = PELOTA_MIN_VEL;
@@ -266,7 +270,7 @@ Events.on(engine, 'collisionStart', event => {
                 velTot = PELOTA_MIN_VEL;
                 setRandVel(bola, velTot);
             }
-            */
+            
         }
     }
 });
@@ -304,7 +308,7 @@ Events.on(engine, 'collisionEnd', event => {
                 id:idJugador
             }
 
-            socket.emit('colision', newVel);
+            socket.emit('colision', newVel, { x:pair.bodyA.position.x, y:pair.bodyA.position.y });
             Body.setVelocity(pair.bodyA, Matter.Vector.create( newVel.x, newVel.y ));
 
         } else {
@@ -314,7 +318,7 @@ Events.on(engine, 'collisionEnd', event => {
                 id:idJugador
             }
 
-            socket.emit('colision', newVel);
+            socket.emit('colision', newVel, { x:pair.bodyB.position.x, y:pair.bodyB.position.y });
             Body.setVelocity(pair.bodyB, Matter.Vector.create( newVel.x, newVel.y ));
         }
 
@@ -363,21 +367,34 @@ function moveAngle(position, vel, angle) {
 World.add(engine.world, [bola, paleta, paleta2, paleta3, puntuacionJ1, puntuacionJ2, puntuacionJ3]);
 
 // run the engine
-Engine.run(engine);
+Runner.run(runner, engine);
 
 // run the renderer
 CustomRender.run(render);
 
 // Socket.io
-socket.on('succes-conn', id => { 
-    console.log("hola");
+socket.on('succes-conn', id => {
     if(idJugador == 0) {
         idJugador = id;
-        console.log(idJugador);
+        console.log(`Id: ${idJugador}`);
+
+        // --- Asignamos las teclas de movimiento segun el id ---
+        switch(idJugador) {
+            case 1:
+                keyAsignation(keys, paleta);
+                break;
+            case 2:
+                keyAsignation(keys, paleta2);
+                break;
+            case 3:
+                keyAsignation(keys, paleta3);
+                break;
+        }
     }
 });
 
-socket.on('sync-call', newVel => {
+socket.on('sync-call', (newVel, newPos) => {
+    Body.setPosition( bola, Matter.Vector.create( newPos.x, newPos.y ) );
     Body.setVelocity( bola, Matter.Vector.create( newVel.x, newVel.y ) );
 });
 
