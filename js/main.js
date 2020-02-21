@@ -381,13 +381,13 @@ socket.on('succes-conn', id => {
         // --- Asignamos las teclas de movimiento segun el id ---
         switch(idJugador) {
             case 1:
-                keyAsignation(keys, paleta);
+                keyAsignation(keys, paleta, idJugador);
                 break;
             case 2:
-                keyAsignation(keys, paleta2);
+                keyAsignation(keys, paleta2, idJugador);
                 break;
             case 3:
-                keyAsignation(keys, paleta3);
+                keyAsignation(keys, paleta3, idJugador);
                 break;
         }
     }
@@ -396,6 +396,20 @@ socket.on('succes-conn', id => {
 socket.on('sync-call', (newVel, newPos) => {
     Body.setPosition( bola, Matter.Vector.create( newPos.x, newPos.y ) );
     Body.setVelocity( bola, Matter.Vector.create( newVel.x, newVel.y ) );
+});
+
+socket.on('sync-paleta', (dir, id) => {
+    switch(id) {
+        case 1:
+            paleta.moving = dir;
+            break;
+        case 2:
+            paleta2.moving = dir;
+            break;
+        case 3:
+            paleta3.moving = dir;
+            break;
+    }
 });
 
 socket.on('full', v => {

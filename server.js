@@ -70,6 +70,11 @@ io.on('connection', socket => {
         }
     });
 
+    socket.on('move-paleta', (dir,id) => {
+        console.log(`Move dir->${dir} jugador->${id}`);
+        socket.to(partidas[partidaAsignada].nombre).emit('sync-paleta', dir, id);
+    });
+
     socket.on('disconnect', () => {
         console.log(`User disconnected from ${partidas[partidaAsignada].nombre}`);
         socket.leave(partidas[partidaAsignada].nombre);

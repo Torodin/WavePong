@@ -1,6 +1,6 @@
 {
     "name": "pong-game-server",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "description": "pong game",
     "dependencies": {
         "express": "^4.17.1",

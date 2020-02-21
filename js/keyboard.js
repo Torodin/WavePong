@@ -42,21 +42,25 @@ class Key {
     }
 }
 
-function keyAsignation(keys, paleta) {
+function keyAsignation(keys, paleta, id) {
     keys.k1.press = () => {
         paleta.moving = -1;
+        socket.emit('move-paleta', -1, id);
     }
     
     keys.k1.release = () => {
         paleta.moving = 0;
+        socket.emit('move-paleta', 0, id);
     }
     
     keys.k2.press = () => {
         paleta.moving = 1;
+        socket.emit('move-paleta', 1, id);
     }
     
     keys.k2.release = () => {
         paleta.moving = 0;
+        socket.emit('move-paleta', 0, id);
     }
 
     return keys;

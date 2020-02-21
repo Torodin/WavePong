@@ -17,7 +17,9 @@ Se trata de una versión del clasico Pong que consiste en que ahora en lugar de 
 | <kbd>l</kbd> | l | Mueve la barra del jugador 3 hacia la derecha|
 
 ## Historial de versiones
-
+* 0.1.0
+    * Mecanicas basicas basicas
+    * Multi-jugador
 * 0.0.1
     * Diseño en Proceso
 
