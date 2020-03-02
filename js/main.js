@@ -450,15 +450,15 @@ socket.on('sync-paleta', (dir, id, position) => {
     switch(id) {
         case 1:
             paleta.moving = dir;
-            paleta.position = position;
+            Body.setPosition(paleta, position);
             break;
         case 2:
             paleta2.moving = dir;
-            paleta2.position = position;
+            Body.setPosition(paleta2, position);
             break;
         case 3:
             paleta3.moving = dir;
-            paleta3.position = position;
+            Body.setPosition(paleta3, position);
             break;
     }
 });
