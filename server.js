@@ -50,33 +50,36 @@ io.on('connection', socket => {
 
     // Añadimos al nuevo jugador a la ultima partida
     let partidaAsignada = ultimaPartida;
-    partidas[ultimaPartida].jugadores++;
-    socket.join(partidas[ultimaPartida].nombre);
+    partidas[partidaAsignada].jugadores++;
+    socket.join(partidas[partidaAsignada].nombre);
 
-    console.log(`User connected to ${partidas[ultimaPartida].nombre}`);
-    io.to(partidas[partidaAsignada].nombre).emit( 'succes-conn', partidas[ultimaPartida].jugadores ); 
+    console.log(`User connected to ${partidas[partidaAsignada].nombre}`);
+    io.to(partidas[partidaAsignada].nombre).emit( 'succes-conn', partidas[partidaAsignada].jugadores ); 
 
     // Si la ultima partida ya tiene tres jugadores les indicamos que empiecen a jugar
-    if(partidas[ultimaPartida].jugadores==3 && !partidas[ultimaPartida].playing) {
-        console.log(`Start game ${partidas[ultimaPartida].nombre}`);
-        io.to(partidas[ultimaPartida].nombre).emit( 'full', getRandomVelocity(6) );
-        partidas[ultimaPartida].playing = true;
+    if(partidas[partidaAsignada].jugadores==3 && !partidas[partidaAsignada].playing) {
+        console.log(`Start game ${partidas[partidaAsignada].nombre}`);
+        io.to(partidas[partidaAsignada].nombre).emit( 'full', getRandomVelocity(6) );
+        partidas[partidaAsignada].playing = true;
     }
 
     socket.on('colision', (vel,pos) => {
-        if(vel.id == 1) {
-            console.log(`Sync vx->${vel.x} vy->${vel.y} | px->${pos.x} py->${pos.y}`);
-            socket.to(partidas[partidaAsignada].nombre).emit('sync-call', { x:vel.x, y:vel.y }, { x:pos.x, y:pos.y });
-        }
+        //socket.to(partidas[partidaAsignada].nombre).emit('sync-call', { x:vel.x, y:vel.y }, { x:pos.x, y:pos.y });
+        socket.to(partidas[partidaAsignada].nombre).emit('sync-call', vel, pos);
     });
 
     socket.on('move-paleta', (dir,id) => {
-        console.log(`Move dir->${dir} jugador->${id}`);
         socket.to(partidas[partidaAsignada].nombre).emit('sync-paleta', dir, id);
+    });
+
+    socket.on('puntua', (v, puntuacionesSync) => {
+        socket.to(partidas[partidaAsignada].nombre).emit('puntua', v, puntuacionesSync);
     });
 
     socket.on('disconnect', () => {
         console.log(`User disconnected from ${partidas[partidaAsignada].nombre}`);
+
+        socket.to(partidas[partidaAsignada].nombre).emit('user-disconnect');
         socket.leave(partidas[partidaAsignada].nombre);
         partidas[partidaAsignada].jugadores--;
 

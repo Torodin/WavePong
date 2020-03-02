@@ -13,29 +13,17 @@ let keys = {
     'k2': new Key('ArrowRight')
 }
 
-/*
-let keys2 = {
-    'k1': new Key('j'),
-    'k2': new Key('l')
-}
-
-let keys3 = {
-    'k1': new Key('a'),
-    'k2': new Key('d')
-}
-*/
-
 const BACK_COLOR = '#3D144C';
 const TEXT_COLOR = '#E900FF';
 
 // Caracteristicas pelota
-const PELOTA_RAD = 16;
+const PELOTA_RAD = 13;
 const PELOTA_POS_INI = [950,430];
-const PELOTA_MIN_VEL = 5.8;
+const PELOTA_MIN_VEL = 5;
 const PELOTA_MAX_VEL = 10;
 const PELOTA_COLOR = '#F52789';
 
-let velTot = 6;
+let velTot = PELOTA_MIN_VEL;
 
 // Caracteristicas paleta
 const PLANK_HEGHT = 10;
@@ -255,20 +243,33 @@ Events.on(engine, 'collisionStart', event => {
                 }
 
                 ultimoGolpe = -1;
-                Composite.allBodies(engine.world).find(el => el.label == 'cont1').render.text.content = `Puntuación Jugador1: ${puntuaciones[0]}`;
-                Composite.allBodies(engine.world).find(el => el.label == 'cont2').render.text.content = `Puntuación Jugador2: ${puntuaciones[1]}`;
-                Composite.allBodies(engine.world).find(el => el.label == 'cont3').render.text.content = `Puntuación Jugador3: ${puntuaciones[2]}`;
+
+                actualizarMarcadores();
             }
 
             
             if(pair.bodyA.label == 'Pelota') {
                 Body.setPosition(pair.bodyA, Vector.create(PELOTA_POS_INI[0], PELOTA_POS_INI[1]));
                 velTot = PELOTA_MIN_VEL;
-                setRandVel(bola, velTot);
+                
+                if(idJugador==1) {
+                    let newVel = getRandomVelocity(velTot);
+
+                    socket.emit('puntua', newVel, puntuaciones);
+                    Body.setVelocity( bola, Vector.create(newVel.x, newVel.y) );
+                }
             } else {
                 Body.setPosition(pair.bodyB, Vector.create(PELOTA_POS_INI[0], PELOTA_POS_INI[1]));
                 velTot = PELOTA_MIN_VEL;
-                setRandVel(bola, velTot);
+                
+                //setRandVel(bola, velTot);
+
+                if(idJugador==1) {
+                    let newVel = getRandomVelocity(velTot);
+
+                    socket.emit('puntua', newVel, puntuaciones);
+                    Body.setVelocity( bola, Vector.create(newVel.x, newVel.y) );
+                }
             }
             
         }
@@ -301,27 +302,26 @@ Events.on(engine, 'collisionEnd', event => {
         }
 
         // Ajustamos la velocidad de la pelota para que no reducca la velocidad
-        if(pair.bodyA.label == 'Pelota'){
-            let newVel = {
-                x:pair.bodyA.velocity.x,
-                y:( pair.bodyA.velocity.y>0 ? 1:-1 )*Math.sqrt(velTot**2-pair.bodyA.velocity.x**2),
-                id:idJugador
+        if(idJugador==1){
+            if(pair.bodyA.label == 'Pelota'){
+                let newVel = {
+                    x:pair.bodyA.velocity.x,
+                    y:( pair.bodyA.velocity.y>0 ? 1:-1 )*Math.sqrt(velTot**2-pair.bodyA.velocity.x**2)
+                }
+
+                socket.emit('colision', newVel, { x:pair.bodyA.position.x, y:pair.bodyA.position.y });
+                Body.setVelocity(pair.bodyA, Matter.Vector.create( newVel.x, newVel.y ));
+
+            } else {
+                let newVel = {
+                    x:pair.bodyB.velocity.x,
+                    y:( pair.bodyB.velocity.y>0 ? 1:-1 )*Math.sqrt(velTot**2-pair.bodyB.velocity.x**2)
+                }
+
+                socket.emit('colision', newVel, { x:pair.bodyB.position.x, y:pair.bodyB.position.y });
+                Body.setVelocity(pair.bodyB, Matter.Vector.create( newVel.x, newVel.y ));
             }
-
-            socket.emit('colision', newVel, { x:pair.bodyA.position.x, y:pair.bodyA.position.y });
-            Body.setVelocity(pair.bodyA, Matter.Vector.create( newVel.x, newVel.y ));
-
-        } else {
-            let newVel = {
-                x:pair.bodyB.velocity.x,
-                y:( pair.bodyB.velocity.y>0 ? 1:-1 )*Math.sqrt(velTot**2-pair.bodyB.velocity.x**2),
-                id:idJugador
-            }
-
-            socket.emit('colision', newVel, { x:pair.bodyB.position.x, y:pair.bodyB.position.y });
-            Body.setVelocity(pair.bodyB, Matter.Vector.create( newVel.x, newVel.y ));
         }
-
 
         /*Body.setVelocity(pair.bodyA, 
             Matter.Vector.create(
@@ -343,12 +343,28 @@ Events.on(engine, 'beforeUpdate', event => {
         Body.setPosition( paleta3, moveAngle(paleta3.position, PLANK_VEL*paleta3.moving, -2.6) );
 });
 
+/**
+ * Funcion para obtener una velocidad en direccion random
+ * @param {Body} obj objeto al que asignar la velocidad
+ * @param {Number} targetVel Velocidad objetivo
+ * @return {Vector} Retorna la posicion resultante del movimiento
+ */
 function setRandVel(obj, targetVel) {
     let velX = Math.random()*(targetVel*2+1)-targetVel;
     Body.setVelocity(obj, Vector.create(
         velX,
         ((Math.random()>0.5)?1:-1)*Math.sqrt(targetVel**2-velX**2)
     ));
+}
+
+function getRandomVelocity(targetVel) {
+    let velX = Math.random()*(targetVel*2+1)-targetVel;
+    let vResult = {
+            x: velX,
+            y: (Math.random() > 0.5 ? 1:-1)*Math.sqrt(targetVel**2-velX**2)
+    };
+    
+    return vResult;
 }
 
 /**
@@ -360,6 +376,12 @@ function setRandVel(obj, targetVel) {
  */
 function moveAngle(position, vel, angle) {
     return Vector.add( Vector.rotate( Vector.create(0,-vel), angle ), position );
+}
+
+function actualizarMarcadores() {
+    Composite.allBodies(engine.world).find(el => el.label == 'cont1').render.text.content = `Puntuación Jugador1: ${puntuaciones[0]}`;
+    Composite.allBodies(engine.world).find(el => el.label == 'cont2').render.text.content = `Puntuación Jugador2: ${puntuaciones[1]}`;
+    Composite.allBodies(engine.world).find(el => el.label == 'cont3').render.text.content = `Puntuación Jugador3: ${puntuaciones[2]}`;
 }
 
 //setRandVel(bola, velTot);
@@ -394,7 +416,9 @@ socket.on('succes-conn', id => {
 });
 
 socket.on('sync-call', (newVel, newPos) => {
-    Body.setPosition( bola, Matter.Vector.create( newPos.x, newPos.y ) );
+    let checkSum = newPos.x - bola.position.x + newPos.y - bola.position.y;
+
+    if(checkSum != 0) Body.setPosition( bola, Matter.Vector.create( newPos.x, newPos.y ) );
     Body.setVelocity( bola, Matter.Vector.create( newVel.x, newVel.y ) );
 });
 
@@ -413,8 +437,24 @@ socket.on('sync-paleta', (dir, id) => {
 });
 
 socket.on('full', v => {
-    Body.setVelocity( bola, Vector.create(v.x, v.y) ) 
+    Body.setVelocity( bola, Vector.create(v.x, v.y) );
     console.log(`Vel set to: x-${v.x} y-${v.y} | Bola vel: x-${bola.velocity.x} y-${bola.velocity.y}`);
 });
 
-socket.on('hola', () => console.log("hola"));
+socket.on('puntua', (v, puntuacionesSync) => {
+    Body.setVelocity( bola, Vector.create(v.x, v.y) );
+
+    puntuaciones[0] = puntuacionesSync[0];
+    puntuaciones[1] = puntuacionesSync[1];
+    puntuaciones[2] = puntuacionesSync[2];
+
+    actualizarMarcadores();
+});
+
+socket.on('user-disconnect', ()=>{
+    if(idJugador!=1){
+        idJugador--;
+    }
+
+    console.log(idJugador);
+});
