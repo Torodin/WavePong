@@ -50,7 +50,7 @@ function keyAsignation(keys, paleta, id) {
     
     keys.k1.release = () => {
         paleta.moving = 0;
-        socket.emit('move-paleta', 0, id);
+        socket.emit('stop-move-paleta', 0, id, paleta.position);
     }
     
     keys.k2.press = () => {
@@ -60,7 +60,7 @@ function keyAsignation(keys, paleta, id) {
     
     keys.k2.release = () => {
         paleta.moving = 0;
-        socket.emit('move-paleta', 0, id);
+        socket.emit('stop-move-paleta', 0, id, paleta.position);
     }
 
     return keys;

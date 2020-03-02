@@ -13,6 +13,16 @@ let keys = {
     'k2': new Key('ArrowRight')
 }
 
+let keys2 = {
+    'k1': new Key('ArrowDown'),
+    'k2': new Key('ArrowUp')
+}
+
+let keys3 = {
+    'k1': new Key('ArrowUp'),
+    'k2': new Key('ArrowDown')
+}
+
 const BACK_COLOR = '#3D144C';
 const TEXT_COLOR = '#E900FF';
 
@@ -406,10 +416,10 @@ socket.on('succes-conn', id => {
                 keyAsignation(keys, paleta, idJugador);
                 break;
             case 2:
-                keyAsignation(keys, paleta2, idJugador);
+                keyAsignation(keys2, paleta2, idJugador);
                 break;
             case 3:
-                keyAsignation(keys, paleta3, idJugador);
+                keyAsignation(keys3, paleta3, idJugador);
                 break;
         }
     }
@@ -422,7 +432,7 @@ socket.on('sync-call', (newVel, newPos) => {
     Body.setVelocity( bola, Matter.Vector.create( newVel.x, newVel.y ) );
 });
 
-socket.on('sync-paleta', (dir, id) => {
+socket.on('move-paleta', (dir, id) => {
     switch(id) {
         case 1:
             paleta.moving = dir;
@@ -432,6 +442,23 @@ socket.on('sync-paleta', (dir, id) => {
             break;
         case 3:
             paleta3.moving = dir;
+            break;
+    }
+});
+
+socket.on('sync-paleta', (dir, id, position) => {
+    switch(id) {
+        case 1:
+            paleta.moving = dir;
+            paleta.position = position;
+            break;
+        case 2:
+            paleta2.moving = dir;
+            paleta2.position = position;
+            break;
+        case 3:
+            paleta3.moving = dir;
+            paleta3.position = position;
             break;
     }
 });

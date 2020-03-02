@@ -69,7 +69,11 @@ io.on('connection', socket => {
     });
 
     socket.on('move-paleta', (dir,id) => {
-        socket.to(partidas[partidaAsignada].nombre).emit('sync-paleta', dir, id);
+        socket.to(partidas[partidaAsignada].nombre).emit('move-paleta', dir, id);
+    });
+
+    socket.on('stop-move-paleta', (dir,id,position) => {
+        socket.to(partidas[partidaAsignada].nombre).emit('sync-paleta', dir, id, position);
     });
 
     socket.on('puntua', (v, puntuacionesSync) => {
