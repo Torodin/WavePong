@@ -1,15 +1,41 @@
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>Pong</title>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.14.2/matter.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
-        <script src="js/customrender.js"></script>
-        <script src="./js/keyboard.js"></script>
-        <link rel="stylesheet" type="text/css" href="index.css">
-    </head>
-    <body>
-        <input type="text" style="position: absolute; top: 10px; left: 10px" placeholder="usuario"/>
-        <script src="./js/main.js"></script>
-    </body>
+<html class="aesthetic-effect-crt">
+
+<head>
+    <meta charset="utf-8">
+    <title>Pong</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.14.2/matter.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <script src="js/customrender.js"></script>
+    <script src="./js/keyboard.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/aesthetic.css">
+    <link rel="stylesheet" type="text/css" href="index.css">
+</head>
+
+<body>
+    <div id="login" class="aesthetic-windows-95-modal">
+
+        <!-- Title Bar -->
+        <div class="aesthetic-windows-95-modal-title-bar">
+            <div class="aesthetic-windows-95-modal-title-bar-text">
+                Welcome to MultiPong
+            </div>
+
+            <div class="aesthetic-windows-95-modal-title-bar-controls">
+                <div class="aesthetic-windows-95-button-title-bar">
+                    <button>
+                        X
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="aesthetic-windows-95-modal-content">
+            <img src="images/login-img.png" alt="login icon" align="middle">
+            <input class="aesthetic-windows-95-text-input" type="text" name="username" id="username" value="User name">
+            <div class="aesthetic-windows-95-button" id="login-sub-div"><button id="login-sub">OK</button></div>
+        </div>
+    </div>
+    <script src="./js/main.js"></script>
+</body>
+
 </html>

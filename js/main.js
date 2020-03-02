@@ -68,7 +68,7 @@ var render = CustomRender.create({
     options: {
         width: 1905,//window.innerWidth,
         height: 935,//window.innerHeight,
-        background: BACK_COLOR,
+        background: 'transparent',
         wireframes: false
     }
 });

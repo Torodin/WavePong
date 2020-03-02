@@ -1,4 +1,17 @@
 body {
     margin: 0;
-    background-color: #3D144C;
+    background-color: black;
+    background-image: url("images/resize-background.gif");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#login {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+}
+
+#login-sub-div {
+    margin: 0 auto;
 }
