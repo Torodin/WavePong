@@ -21,8 +21,17 @@ body {
     left: 15px;
 }
 
-#login-sub-div {
+#password { margin-top: 5px; }
+
+.login-buttons {
+    clear: both;
+    width: 75%;
     margin: 0 auto;
+    align-content: center;
+}
+
+.login-buttons .aesthetic-windows-95-button { 
+    display: inline-block;
 }
 
 .aesthetic-windows-95-taskbar {
@@ -56,8 +65,9 @@ body {
 #game-div { 
     background-color: black;
     margin: 3px auto;
-    width: 98%;
-    height: 95%;
+    padding: 0;
+    width: 99%;
+    height: 96%;
 }
 
 .aesthetic-windows-95-button-title-bar {

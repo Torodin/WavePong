@@ -194,7 +194,7 @@ var paleta3 = Bodies.rectangle(posPal3.x, posPal3.y, 10, 75,
     }
 );
 
-var puntuacionJ1 = Bodies.rectangle(950, 850, 1, 1, 
+var puntuacionJ1 = Bodies.rectangle(180, 650, 1, 1, 
     {
         label: "cont1",
         isStatic: true,
@@ -209,7 +209,7 @@ var puntuacionJ1 = Bodies.rectangle(950, 850, 1, 1,
     }
 );
 
-var puntuacionJ2 = Bodies.rectangle(950, 880, 1, 1, 
+var puntuacionJ2 = Bodies.rectangle(180, 680, 1, 1, 
     {
         label: "cont2",
         isStatic: true,
@@ -224,7 +224,7 @@ var puntuacionJ2 = Bodies.rectangle(950, 880, 1, 1,
     }
 );
 
-var puntuacionJ3 = Bodies.rectangle(950, 910, 1, 1, 
+var puntuacionJ3 = Bodies.rectangle(180, 710, 1, 1, 
     {
         label: "cont3",
         isStatic: true,
@@ -480,10 +480,35 @@ socket.on('puntua', (v, puntuacionesSync) => {
     actualizarMarcadores();
 });
 
-socket.on('user-disconnect', ()=>{
-    if(idJugador!=1){
+socket.on('user-disconnect', idDisconn=>{
+    console.log(`Player id: ${idDisconn} disconected`);
+    if(idDisconn == 1) {
         idJugador--;
+        socket.emit('id-update', idJugador);
+    } else if(idDisconn == 2 && idJugador == 3) {
+        idJugador--;
+        socket.emit('id-update', idJugador);
     }
 
-    console.log(idJugador);
+    console.log(`New id: ${idJugador}`);
+});
+
+socket.on('cambio-usuario', (data, id) => {
+    if(id===idJugador) document.getElementById('login').classList.toggle('oculta');
+
+    puntuacionJ1.render.text = {
+        content: `Puntuación ${data[0].name}: ${puntuaciones[0]}`,
+        color: TEXT_COLOR,
+        size: 20
+    }
+    puntuacionJ2.render.text = {
+        content: `Puntuación ${data[1].name}: ${puntuaciones[1]}`,
+        color: TEXT_COLOR,
+        size: 20
+    }
+    puntuacionJ3.render.text = {
+        content: `Puntuación ${data[2].name}: ${puntuaciones[2]}`,
+        color: TEXT_COLOR,
+        size: 20
+    }
 });

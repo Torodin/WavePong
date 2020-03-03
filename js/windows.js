@@ -11,3 +11,16 @@ gameWindowMinButton.addEventListener('click', () => {
     taskbarGameButton.classList.toggle('infront');
     gameWindow.classList.toggle('oculta');
 });
+
+let loginUser = document.getElementById('username');
+let loginPsw = document.getElementById('password');
+let loginSubButton = document.getElementById('login-sub');
+let loginRegButton = document.getElementById('login-reg');
+
+loginRegButton.addEventListener('click', () => {
+    socket.emit('new-user', idJugador, loginUser.value, loginPsw.value);
+});
+
+loginSubButton.addEventListener('click', () => {
+    socket.emit('login', idJugador, loginUser.value, loginPsw.value);
+});
