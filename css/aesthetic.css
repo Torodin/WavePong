@@ -596,7 +596,7 @@
     width: 100%; }
     .aesthetic-windows-95-button button:focus, .aesthetic-windows-95-taskbar .aesthetic-windows-95-taskbar-start button:focus {
       outline: 1px dashed #000; }
-  .aesthetic-windows-95-button:active, .aesthetic-windows-95-button-title-bar:active, .aesthetic-windows-95-taskbar .aesthetic-windows-95-taskbar-start:active {
+  .aesthetic-windows-95-button:active, .aesthetic-windows-95-button-title-bar:active, .aesthetic-windows-95-taskbar .aesthetic-windows-95-taskbar-start:active, .infront {
     /*transform: translateY(1px);*/
     box-shadow: 0 0 0 1px #000;
     border-bottom-color: #DFDFDF;
@@ -1184,7 +1184,8 @@
   .aesthetic-windows-95-modal .aesthetic-windows-95-modal-title-bar .aesthetic-windows-95-modal-title-bar-text {
     color: #FFF; }
   .aesthetic-windows-95-modal .aesthetic-windows-95-modal-title-bar .aesthetic-windows-95-modal-title-bar-controls {
-    margin-left: auto; }
+    margin-left: auto; 
+    display: flex;}
 
 .aesthetic-windows-95-modal .aesthetic-windows-95-modal-content {
   padding-top: 7px;

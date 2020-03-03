@@ -1,0 +1,79 @@
+body {
+    margin: 0;
+    background-color: black;
+}
+
+.normal-back {
+    background-image: url("../images/static-back.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.animated-back {
+    background-image: url("../images/animated-back-compresed.gif");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#login {
+    position: absolute;
+    top: 45px;
+    left: 15px;
+}
+
+#login-sub-div {
+    margin: 0 auto;
+}
+
+.aesthetic-windows-95-taskbar {
+    font-weight: bold;
+    position: absolute;
+    padding-left: 0.2%;
+    padding-right: 0.2%;
+    width: 99.6%;
+    bottom: 0;
+}
+
+.aesthetic-windows-95-taskbar span {
+    font-size: 18px;
+    margin-left: 5px;
+}
+
+.noselect { user-select: none; }
+
+.oculta {
+    display: none;
+}
+
+#game-window {
+    position: absolute;
+    top: 2vh;
+    left: 11vw;
+    width: 80vw;
+    height: 90vh;
+}
+
+#game-div { 
+    background-color: black;
+    margin: 3px auto;
+    width: 98%;
+    height: 95%;
+}
+
+.aesthetic-windows-95-button-title-bar {
+    margin-left: 3px;
+}
+
+.aesthetic-windows-95-taskbar div:not(:last-child) {
+    margin-right: 7px;
+}
+
+#game-taskbar-button {
+    width: 130px;
+}
+
+#game-taskbar-button span{ margin: 0; }
+
+#game-taskbar-button img{ width: 35px; }
+
+.infront { background-color: #E4E4E4; }

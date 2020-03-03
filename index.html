@@ -8,16 +8,43 @@
     <script src="js/customrender.js"></script>
     <script src="./js/keyboard.js"></script>
     <link rel="stylesheet" type="text/css" href="css/aesthetic.css">
-    <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
 </head>
 
-<body>
-    <div id="login" class="aesthetic-windows-95-modal">
-
-        <!-- Title Bar -->
+<body class="animated-back">
+    <!-- ### Ventana del juego ### -->
+    <div id="game-window" class="aesthetic-windows-95-modal">
+        <!-- Titulo de la ventana -->
         <div class="aesthetic-windows-95-modal-title-bar">
             <div class="aesthetic-windows-95-modal-title-bar-text">
-                Welcome to MultiPong
+                WavePong
+            </div>
+
+            <div class="aesthetic-windows-95-modal-title-bar-controls">
+                <div class="aesthetic-windows-95-button-title-bar">
+                  <button id="gameMinButton">
+                    _
+                  </button>
+                </div>
+                <div class="aesthetic-windows-95-button-title-bar">
+                  <button>
+                    X
+                  </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenido de la ventana -->
+        <div id="game-div" class="aesthetic-windows-95-modal-content">
+        </div>
+    </div>
+
+    <!-- ### Ventana de login ### -->
+    <div id="login" class="aesthetic-windows-95-modal">
+        <!-- Titulo de la ventana -->
+        <div class="aesthetic-windows-95-modal-title-bar">
+            <div class="aesthetic-windows-95-modal-title-bar-text">
+                Welcome to WavePong
             </div>
 
             <div class="aesthetic-windows-95-modal-title-bar-controls">
@@ -29,6 +56,7 @@
             </div>
         </div>
 
+        <!-- Contenido de la ventana -->
         <div class="aesthetic-windows-95-modal-content">
             <img src="images/login-img.png" alt="login icon" align="middle">
             <input class="aesthetic-windows-95-text-input" type="text" name="username" id="username" value="User name">
@@ -36,16 +64,23 @@
         </div>
     </div>
 
-    <div class="aesthetic-windows-95-taskbar">
+    <!-- ### Barra de tareas ### -->
+    <div class="aesthetic-windows-95-taskbar noselect">
         <div class="aesthetic-windows-95-taskbar-start">
-            <img src="images/windows.png" alt="windows logo" align="top">
-            <span class="noselect">Start</span>
+            <img src="images/windows.png" alt="windows logo">
+            <span>Start</span>
+        </div>
+
+        <div id="game-taskbar-button" class="aesthetic-windows-95-button infront">
+            <img src="images/logo_sin_nombre.png" alt="wavepong logo">
+            <span>WavePong</span>
         </div>
 
         <div class="aesthetic-windows-95-taskbar-services">
-            <img class="noselect" src="images/connected.png" alt="windows logo" align="middle">
+            <img src="images/connected.png" alt="windows logo">
         </div>
     </div>
+    <script src="./js/windows.js"></script>
     <script src="./js/main.js"></script>
 </body>
 

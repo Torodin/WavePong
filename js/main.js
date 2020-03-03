@@ -71,13 +71,15 @@ let runner = Runner.create({
 
 engine.timing.isFixed = true;
 
+let gameContainer = document.getElementById('game-div');
+
 // create a renderer
 var render = CustomRender.create({
-    element: document.body,
+    element: gameContainer,
     engine: engine,
     options: {
-        width: 1905,//window.innerWidth,
-        height: 935,//window.innerHeight,
+        width: gameContainer.offsetWidth, //1905
+        height: gameContainer.offsetHeight, //935
         background: 'transparent',
         wireframes: false
     }
