@@ -324,7 +324,7 @@ Events.on(engine, 'collisionEnd', event => {
                     y:( pair.bodyA.velocity.y>0 ? 1:-1 )*Math.sqrt(velTot**2-pair.bodyA.velocity.x**2)
                 }
 
-                socket.emit('colision', newVel, { x:pair.bodyA.position.x, y:pair.bodyA.position.y });
+                socket.emit('colision', newVel, { x:pair.bodyA.position.x, y:pair.bodyA.position.y }, Date.now());
                 Body.setVelocity(pair.bodyA, Matter.Vector.create( newVel.x, newVel.y ));
 
             } else {
@@ -333,7 +333,7 @@ Events.on(engine, 'collisionEnd', event => {
                     y:( pair.bodyB.velocity.y>0 ? 1:-1 )*Math.sqrt(velTot**2-pair.bodyB.velocity.x**2)
                 }
 
-                socket.emit('colision', newVel, { x:pair.bodyB.position.x, y:pair.bodyB.position.y });
+                socket.emit('colision', newVel, { x:pair.bodyB.position.x, y:pair.bodyB.position.y }, Date.now());
                 Body.setVelocity(pair.bodyB, Matter.Vector.create( newVel.x, newVel.y ));
             }
         }
@@ -430,7 +430,10 @@ socket.on('succes-conn', id => {
     }
 });
 
-socket.on('sync-call', (newVel, newPos) => {
+socket.on('sync-call', (newVel, newPos, timeStamp) => {
+    let actual = Date.now();
+    let timeDif = actual - timeStamp; 
+    console.log(`Time sync: ${timeStamp} | Time actual: ${actual} | Retardo: ${timeDif}`)
     let checkSum = newPos.x - bola.position.x + newPos.y - bola.position.y;
 
     if(checkSum != 0) Body.setPosition( bola, Matter.Vector.create( newPos.x, newPos.y ) );
