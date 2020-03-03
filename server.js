@@ -43,32 +43,6 @@ aws.config.update(config.aws_remote_config);
 
 const docClient = new aws.DynamoDB.DocumentClient();
 
-/* --- Prueba aws dynamoDB --- 
-
-var table = "usuarios";
-
-var name = 'torodin';
-var psw = 'abc123.';
-
-var params = {
-    TableName:table,
-    Item:{
-        "name": name,
-        "psw": psw,
-    }
-};
-
-console.log("Adding a new item...");
-docClient.put(params, function(err, data) {
-    if (err) {
-        console.error("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
-    } else {
-        console.log("Added item:", JSON.stringify(data, null, 2));
-    }
-});
-
- --- Fin prueba aws dynamoDB --- */
-
 let partidas = [new Partida()];
 
 function getRandomVelocity(targetVel) {
@@ -186,4 +160,4 @@ io.on('connection', socket => {
     });
 });
 
-http.listen(8080, () => console.log('listening on *:8080'));
+http.listen(80, () => console.log('listening on *:80'));
