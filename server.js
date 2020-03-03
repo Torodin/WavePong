@@ -119,7 +119,7 @@ io.on('connection', socket => {
             }
         });
 
-        partidas[partidaAsignada].players[id].name = name;
+        partidas[partidaAsignada].players[id-1].name = name;
         io.to(partidas[partidaAsignada].nombre).emit('cambio-usuario', partidas[partidaAsignada].players, id);
     });
 
@@ -138,7 +138,7 @@ io.on('connection', socket => {
             } else {
                 if(data.Item.psw === psw) {
                     console.log(`Usuario ${name} logeado`);
-                    partidas[partidaAsignada].players[id].name = name;
+                    partidas[partidaAsignada].players[id-1].name = name;
                     io.to(partidas[partidaAsignada].nombre).emit('cambio-usuario', partidas[partidaAsignada].players, id);
                 } else {
                     console.log(`Usuario ${name} no logeado`);
