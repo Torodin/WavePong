@@ -433,7 +433,7 @@ socket.on('succes-conn', id => {
 socket.on('sync-call', (newVel, newPos, timeStamp) => {
     let actual = Date.now();
     let timeDif = actual - timeStamp;
-    if(timeDif<0) timeDif*-1;
+    //if(timeDif<0) timeDif*-1;
     let checkSum = newPos.x - bola.position.x + newPos.y - bola.position.y;
 
     if(checkSum == 0) {
