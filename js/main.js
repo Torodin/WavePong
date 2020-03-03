@@ -432,11 +432,19 @@ socket.on('succes-conn', id => {
 
 socket.on('sync-call', (newVel, newPos, timeStamp) => {
     let actual = Date.now();
-    let timeDif = actual - timeStamp; 
+    let timeDif = actual - timeStamp;
+    if(timeDif<0) timeDif*-1;
     let checkSum = newPos.x - bola.position.x + newPos.y - bola.position.y;
-    console.log(checkSum);
 
-    if(checkSum > 15) Body.setPosition( bola, Matter.Vector.create( newPos.x, newPos.y ) );
+    if(checkSum == 0) {
+        Body.setPosition( bola, 
+            Matter.Vector.create( 
+                newPos.x + (newVel.x * 60 * (timeDif / 1000)),
+                newPos.y + (newVel.y * 60 * (timeDif / 1000))
+            ) 
+        );
+    }
+
     Body.setVelocity( bola, Matter.Vector.create( newVel.x, newVel.y ) );
 });
 
