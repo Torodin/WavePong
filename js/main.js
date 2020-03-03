@@ -439,8 +439,8 @@ socket.on('sync-call', (newVel, newPos, timeStamp) => {
     if(checkSum == 0) {
         Body.setPosition( bola, 
             Matter.Vector.create( 
-                newPos.x + (newVel.x * 60 * (timeDif / 1000)),
-                newPos.y + (newVel.y * 60 * (timeDif / 1000))
+                newPos.x + (newVel.x * (timeDif / 1000)),
+                newPos.y + (newVel.y * (timeDif / 1000))
             ) 
         );
     }
