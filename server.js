@@ -1,7 +1,9 @@
-var express = require('express');
-var app = express();
-var http = require('http').createServer(app);
-var io = require('socket.io')(http);
+const express = require('express');
+const app = express();
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
+const aws = require('aws-sdk');
+const config = require('./config.js');
 
 // Clases
 
@@ -24,6 +26,36 @@ class Partida {
 
 app.use(express.static(__dirname + "/"));
 app.get('/', (req, res) => res.sendFile(__dirnombre + '/index.html'));
+
+aws.config.update(config.aws_remote_config);
+
+const docClient = new aws.DynamoDB.DocumentClient();
+
+/* --- Prueba aws dynamoDB --- 
+
+var table = "usuarios";
+
+var name = 'torodin';
+var psw = 'abc123.';
+
+var params = {
+    TableName:table,
+    Item:{
+        "name": name,
+        "psw": psw,
+    }
+};
+
+console.log("Adding a new item...");
+docClient.put(params, function(err, data) {
+    if (err) {
+        console.error("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
+    } else {
+        console.log("Added item:", JSON.stringify(data, null, 2));
+    }
+});
+
+ --- Fin prueba aws dynamoDB --- */
 
 let partidas = [new Partida()];
 
