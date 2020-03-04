@@ -348,6 +348,14 @@ Events.on(engine, 'collisionEnd', event => {
 
 Events.on(engine, 'beforeUpdate', event => {
     // Controlamos que la paleta no se pase de los limites
+    if(idJugador==1)
+        socket.emit(
+            'colision', 
+            bola.velocity, 
+            bola.position, 
+            engine.timing.timestamp
+        );
+
     if( (paleta.position.x>=843 || paleta.moving==1) && (paleta.position.x<=1056 || paleta.moving==-1) ) 
         Body.setPosition(paleta, Vector.add(paleta.position, Vector.create(PLANK_VEL*paleta.moving,0)));
 
@@ -433,11 +441,14 @@ socket.on('succes-conn', id => {
 socket.on('sync-call', (newVel, newPos, timeStamp) => {
     let timeDif = (engine.timing.timestamp - timeStamp);
     console.log(engine.timing.timestamp);
+
+    let predictPosX = newPos.x + ( (timeDif/1000) * newVel.x );
+    let predictPosY = newPos.y + ( (timeDif/1000) * newVel.y );
     
     Body.setPosition( bola, 
         Matter.Vector.create( 
-            newPos.x + ( timeDif>20 ? (newVel.x * timeDif):0 ), 
-            newPos.y + ( timeDif>20 ? (newVel.y * timeDif):0 )
+            newPos.x, 
+            newPos.y
         ) 
     );
 
