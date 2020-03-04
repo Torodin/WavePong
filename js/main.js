@@ -194,6 +194,8 @@ var paleta3 = Bodies.rectangle(posPal3.x, posPal3.y, 10, 75,
     }
 );
 
+let paletas = [paleta, paleta2, paleta3];
+
 var puntuacionJ1 = Bodies.rectangle(180, 650, 1, 1, 
     {
         label: "cont1",
@@ -355,8 +357,9 @@ Events.on(engine, 'beforeUpdate', event => {
             bola.position, 
             engine.timing.timestamp
         );
-        
-    socket.emit('stop-move-paleta', paleta.moving, idJugador, paleta.position);
+    
+    if(paletas[idJugador].moving != 0)
+        socket.emit('stop-move-paleta', paletas[idJugador].moving, idJugador, paletas[idJugador].position);
 
     if( (paleta.position.x>=843 || paleta.moving==1) && (paleta.position.x<=1056 || paleta.moving==-1) ) 
         Body.setPosition(paleta, Vector.add(paleta.position, Vector.create(PLANK_VEL*paleta.moving,0)));
