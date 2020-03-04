@@ -359,7 +359,7 @@ Events.on(engine, 'beforeUpdate', event => {
         );
     
     if(paletas[idJugador-1].moving != 0)
-        socket.emit('stop-move-paleta', paletas[idJugador].moving, idJugador, paletas[idJugador].position);
+        socket.emit('stop-move-paleta', paletas[idJugador-1].moving, idJugador, paletas[idJugador-1].position);
 
     if( (paleta.position.x>=843 || paleta.moving==1) && (paleta.position.x<=1056 || paleta.moving==-1) ) 
         Body.setPosition(paleta, Vector.add(paleta.position, Vector.create(PLANK_VEL*paleta.moving,0)));
