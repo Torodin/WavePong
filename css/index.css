@@ -18,7 +18,13 @@ body {
 #login {
     position: absolute;
     top: 45px;
-    left: 15px;
+    left: 2vw;
+}
+
+#options {
+    position: absolute;
+    top: 100px;
+    right: 6vw;
 }
 
 #password { margin-top: 5px; }
@@ -57,8 +63,8 @@ body {
 #game-window {
     position: absolute;
     top: 2vh;
-    left: 11vw;
-    width: 80vw;
+    left: calc(50% - 500px);
+    width: 1000px;
     height: 90vh;
 }
 

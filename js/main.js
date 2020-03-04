@@ -29,7 +29,7 @@ const TEXT_COLOR = '#E900FF';
 
 // Caracteristicas pelota
 const PELOTA_RAD = 13;
-const PELOTA_POS_INI = [950,430];
+const PELOTA_POS_INI = [550,360];
 const PELOTA_MIN_VEL = 5;
 const PELOTA_MAX_VEL = 10;
 const PELOTA_COLOR = '#F52789';
@@ -46,15 +46,15 @@ const PLANK_COLOR = '#FAEB2C';
 const PORTERIAS = [2,5,8];
 
 const WALLS = [
-    [540, 350],
-    [800, 500],
-    [800, 800],
-    [1100, 800],
-    [1100, 500],
-    [1360, 350],
-    [1210, 90],
-    [950, 240],
-    [690, 90],
+    [140, 310],
+    [400, 460],
+    [400, 760],
+    [700, 760],
+    [700, 460],
+    [960, 310],
+    [810, 50],
+    [550, 200],
+    [290, 50],
 ];
 
 const WALL_COLOR = '#1685F8';
@@ -157,7 +157,7 @@ var bola = Bodies.circle(PELOTA_POS_INI[0],PELOTA_POS_INI[1],PELOTA_RAD,
     }
 );
 
-var paleta = Bodies.rectangle(950, 750, 10, 75, 
+var paleta = Bodies.rectangle(550, 710, 10, 75, 
     {
         label: 'paleta1',
         isStatic: true,
@@ -169,7 +169,7 @@ var paleta = Bodies.rectangle(950, 750, 10, 75,
     }
 );
 
-var posPal2 = moveAngle( Vector.create(1285, 220), 53, -2.35 );
+var posPal2 = moveAngle( Vector.create(885, 180), 53, -2.35 );
 var paleta2 = Bodies.rectangle(posPal2.x, posPal2.y, 10, 75, 
     {
         label: 'paleta2',
@@ -182,7 +182,7 @@ var paleta2 = Bodies.rectangle(posPal2.x, posPal2.y, 10, 75,
     }
 );
 
-var posPal3 = moveAngle( Vector.create(615, 260), 50, 1.35 );
+var posPal3 = moveAngle( Vector.create(215, 220), 50, 1.35 );
 var paleta3 = Bodies.rectangle(posPal3.x, posPal3.y, 10, 75, 
     {
         label: 'paleta3',
