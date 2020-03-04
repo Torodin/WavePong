@@ -131,18 +131,20 @@ io.on('connection', socket => {
             }
         };
 
-        console.log(`Solicitud de logeo ${name}`);
+        console.log(`Solicitud de logeo ${name} - ${psw}`);
         docClient.get(params, function(err, data) {
             if (err) {
                 console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
             } else {
-                if(data.Item.psw === psw) {
-                    console.log(`Usuario ${name} logeado`);
-                    partidas[partidaAsignada].players[id-1].name = name;
-                    io.to(partidas[partidaAsignada].nombre).emit('cambio-usuario', partidas[partidaAsignada].players, id);
-                } else {
-                    console.log(`Usuario ${name} no logeado`);
-                }
+		if(typeof data.Item !== 'undefined'){
+		    if(data.Item.psw === psw) {
+                        console.log(`Usuario ${name} logeado`);
+                        partidas[partidaAsignada].players[id-1].name = name;
+                        io.to(partidas[partidaAsignada].nombre).emit('cambio-usuario', partidas[partidaAsignada].players, id);
+                    } else {
+                        console.log(`Usuario ${name} no logeado`);
+                    }
+		}
             }
         });
     });
