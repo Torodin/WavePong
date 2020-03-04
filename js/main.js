@@ -355,21 +355,8 @@ Events.on(engine, 'beforeUpdate', event => {
             bola.position, 
             engine.timing.timestamp
         );
-
-    switch(id) {
-        case 1:
-            paleta.moving = dir;
-            Body.setPosition(paleta, position);
-            break;
-        case 2:
-            paleta2.moving = dir;
-            Body.setPosition(paleta2, position);
-            break;
-        case 3:
-            paleta3.moving = dir;
-            Body.setPosition(paleta3, position);
-            break;
-    }
+        
+    socket.emit('stop-move-paleta', paleta.moving, id, paleta.position);
 
     if( (paleta.position.x>=843 || paleta.moving==1) && (paleta.position.x<=1056 || paleta.moving==-1) ) 
         Body.setPosition(paleta, Vector.add(paleta.position, Vector.create(PLANK_VEL*paleta.moving,0)));
