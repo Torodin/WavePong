@@ -358,7 +358,7 @@ Events.on(engine, 'beforeUpdate', event => {
             engine.timing.timestamp
         );
     
-    if(paletas[idJugador].moving != 0)
+    if(paletas[idJugador-1].moving != 0)
         socket.emit('stop-move-paleta', paletas[idJugador].moving, idJugador, paletas[idJugador].position);
 
     if( (paleta.position.x>=843 || paleta.moving==1) && (paleta.position.x<=1056 || paleta.moving==-1) ) 
