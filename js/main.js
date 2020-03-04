@@ -7,6 +7,7 @@ const Engine = Matter.Engine,
 
 const socket = io();
 let idJugador = 0;
+let lastUpdate;
 
 let keys = {
     'k1': new Key('ArrowLeft'),
@@ -350,16 +351,19 @@ Events.on(engine, 'collisionEnd', event => {
 
 Events.on(engine, 'beforeUpdate', event => {
     // Controlamos que la paleta no se pase de los limites
-    if(idJugador==1)
-        socket.emit(
-            'colision', 
-            bola.velocity, 
-            bola.position, 
-            engine.timing.timestamp
-        );
     
-    if(paletas[idJugador-1].moving != 0)
-        socket.emit('stop-move-paleta', paletas[idJugador-1].moving, idJugador, paletas[idJugador-1].position);
+    if(idJugador!=0 && lastUpdate-engine.timing.timestamp > 10){
+        if(idJugador==1)
+            socket.emit(
+                'colision', 
+                bola.velocity,
+                bola.position,
+                engine.timing.timestamp
+            );
+        
+        if(paletas[idJugador-1].moving != 0)
+            socket.emit('sync-pos-paleta', idJugador, paletas[idJugador-1].position);
+    }
 
     if( (paleta.position.x>=843 || paleta.moving==1) && (paleta.position.x<=1056 || paleta.moving==-1) ) 
         Body.setPosition(paleta, Vector.add(paleta.position, Vector.create(PLANK_VEL*paleta.moving,0)));
@@ -369,6 +373,8 @@ Events.on(engine, 'beforeUpdate', event => {
 
     if( (paleta3.position.x>=609 || paleta3.moving==-1) && (paleta3.position.x<=719 || paleta3.moving==1) )
         Body.setPosition( paleta3, moveAngle(paleta3.position, PLANK_VEL*paleta3.moving, -2.6) );
+
+    lastUpdate = engine.timing.timestamp;
 });
 
 /**
@@ -490,6 +496,8 @@ socket.on('sync-paleta', (dir, id, position) => {
             break;
     }
 });
+
+socket.on('sync-pos-paleta', (id, position) => Body.setPosition(paletas[id-1],position) );
 
 socket.on('full', v => {
     Body.setVelocity( bola, Vector.create(v.x, v.y) );
