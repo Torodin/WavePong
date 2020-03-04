@@ -327,7 +327,7 @@ Events.on(engine, 'collisionEnd', event => {
                     y:( pair.bodyA.velocity.y>0 ? 1:-1 )*Math.sqrt(velTot**2-pair.bodyA.velocity.x**2)
                 }
 
-                socket.emit('colision', newVel, { x:pair.bodyA.position.x, y:pair.bodyA.position.y }, engine.timing.timestamp);
+                socket.emit('colision', newVel, { x:pair.bodyA.position.x, y:pair.bodyA.position.y });
                 Body.setVelocity(pair.bodyA, Matter.Vector.create( newVel.x, newVel.y ));
 
             } else {
@@ -336,7 +336,7 @@ Events.on(engine, 'collisionEnd', event => {
                     y:( pair.bodyB.velocity.y>0 ? 1:-1 )*Math.sqrt(velTot**2-pair.bodyB.velocity.x**2)
                 }
 
-                socket.emit('colision', newVel, { x:pair.bodyB.position.x, y:pair.bodyB.position.y }, engine.timing.timestamp);
+                socket.emit('colision', newVel, { x:pair.bodyB.position.x, y:pair.bodyB.position.y });
                 Body.setVelocity(pair.bodyB, Matter.Vector.create( newVel.x, newVel.y ));
             }
         }
@@ -357,21 +357,20 @@ Events.on(engine, 'beforeUpdate', event => {
             socket.emit(
                 'colision', 
                 bola.velocity,
-                bola.position,
-                engine.timing.timestamp
+                bola.position
             );
         
         if(paletas[idJugador-1].moving != 0)
             socket.emit('sync-pos-paleta', idJugador, paletas[idJugador-1].position);
     }
 
-    if( (paleta.position.x>=843 || paleta.moving==1) && (paleta.position.x<=1056 || paleta.moving==-1) ) 
+    if( (paleta.position.x>=443 || paleta.moving==1) && (paleta.position.x<=656 || paleta.moving==-1) ) 
         Body.setPosition(paleta, Vector.add(paleta.position, Vector.create(PLANK_VEL*paleta.moving,0)));
 
-    if( (paleta2.position.x>=1189 || paleta2.moving==-1) && (paleta2.position.x<=1293 || paleta2.moving==1) )
+    if( (paleta2.position.x>=789 || paleta2.moving==-1) && (paleta2.position.x<=893 || paleta2.moving==1) )
         Body.setPosition( paleta2, moveAngle(paleta2.position, PLANK_VEL*paleta2.moving, -0.52) );
 
-    if( (paleta3.position.x>=609 || paleta3.moving==-1) && (paleta3.position.x<=719 || paleta3.moving==1) )
+    if( (paleta3.position.x>=209 || paleta3.moving==-1) && (paleta3.position.x<=319 || paleta3.moving==1) )
         Body.setPosition( paleta3, moveAngle(paleta3.position, PLANK_VEL*paleta3.moving, -2.6) );
 
     lastUpdate = engine.timing.timestamp;
@@ -449,13 +448,7 @@ socket.on('succes-conn', id => {
     }
 });
 
-socket.on('sync-call', (newVel, newPos, timeStamp) => {
-    let timeDif = (engine.timing.timestamp - timeStamp);
-    console.log(engine.timing.timestamp);
-
-    let predictPosX = newPos.x + ( (timeDif/1000) * newVel.x );
-    let predictPosY = newPos.y + ( (timeDif/1000) * newVel.y );
-    
+socket.on('sync-call', (newVel, newPos) => {    
     Body.setPosition( bola, 
         Matter.Vector.create( 
             newPos.x, 

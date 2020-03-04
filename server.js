@@ -84,9 +84,9 @@ io.on('connection', socket => {
         partidas[partidaAsignada].playing = true;
     }
 
-    socket.on('colision', (vel,pos,timeStamp) => {
+    socket.on('colision', (vel,pos) => {
         //socket.to(partidas[partidaAsignada].nombre).emit('sync-call', { x:vel.x, y:vel.y }, { x:pos.x, y:pos.y });
-        socket.to(partidas[partidaAsignada].nombre).emit('sync-call', vel, pos, timeStamp);
+        socket.to(partidas[partidaAsignada].nombre).emit('sync-call', vel, pos);
     });
 
     socket.on('move-paleta', (dir,id) => {

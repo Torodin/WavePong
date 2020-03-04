@@ -15,6 +15,10 @@ Se trata de una versión del clasico Pong que consiste en que ahora en lugar de 
 | <kbd>↓</kbd> | Derecha | Mueve la barra del jugador derecho e izquierdo hacia abajo |
 
 ## Historial de versiones
+* 0.1.3
+    * Mejora de la sincronizacion entre jugadores
+    * Menú de opciones (en proceso)
+    * Cambios el el aspecto grafico
 * 0.1.2
     * Sistemas de usuarios integrado
     * Renovación de la interfaz
