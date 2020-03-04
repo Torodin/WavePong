@@ -101,3 +101,11 @@ body { cursor: url('../images/cursor-retro-1.png'), auto; }
 .infront { background-color: #E4E4E4; }
 
 .only-deco { cursor: url("../images/cursor-retro-3.png"), auto !important;}
+
+audio {
+    background-color: lightcyan;
+    height: 30px;
+    border: 2px solid #808080;
+    border-bottom-color: #dfdfdf;
+    border-right-color: #dfdfdf;
+}

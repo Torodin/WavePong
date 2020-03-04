@@ -36,3 +36,6 @@ loginRegButton.addEventListener('click', () => {
 loginSubButton.addEventListener('click', () => {
     socket.emit('login', idJugador, loginUser.value, loginPsw.value);
 });
+
+
+document.getElementsByTagName('audio')[0].play();
