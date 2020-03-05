@@ -1,6 +1,7 @@
 body {
     margin: 0;
     background-color: black;
+    image-rendering: pixelated;
 }
 
 .normal-back {
@@ -10,7 +11,7 @@ body {
 }
 
 .animated-back {
-    background-image: url("../images/animated-back-compresed.gif");
+    background-image: url("../images/animated-back-pre.gif");
     background-repeat: no-repeat;
     background-size: cover;
 }
