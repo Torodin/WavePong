@@ -4,6 +4,12 @@ body {
     image-rendering: pixelated;
 }
 
+body { cursor: url('../images/cursor-retro-1.png'), auto; }
+
+.aesthetic-windows-95-button { cursor: url('../images/cursor-retro-2.png'), auto !important; }
+
+.aesthetic-windows-95-checkbox,  button, .aesthetic-windows-95-checkmark { cursor: url("../images/cursor-retro-2.png"), auto !important; }
+
 .normal-back {
     background-image: url("../images/static-back.png");
     background-repeat: no-repeat;
@@ -94,3 +100,13 @@ body {
 #game-taskbar-button img{ width: 35px; }
 
 .infront { background-color: #E4E4E4; }
+
+.only-deco { cursor: url("../images/cursor-retro-3.png"), auto !important;}
+
+audio {
+    background-color: lightcyan;
+    height: 30px;
+    border: 2px solid #808080;
+    border-bottom-color: #dfdfdf;
+    border-right-color: #dfdfdf;
+}

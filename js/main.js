@@ -205,7 +205,7 @@ var puntuacionJ1 = Bodies.rectangle(180, 650, 1, 1,
         render: {
             fillStyle: "red",
             text: {
-                content: `Puntuación Jugador1: ${puntuaciones[0]}`,
+                content: ``,
                 color: TEXT_COLOR,
                 size: 20
             }
@@ -221,7 +221,7 @@ var puntuacionJ2 = Bodies.rectangle(180, 680, 1, 1,
         render: {
             fillStyle: "red",
             text: {
-                content: `Puntuación Jugador2: ${puntuaciones[1]}`,
+                content: ``,
                 color: TEXT_COLOR,
                 size: 20
             }
@@ -237,7 +237,7 @@ var puntuacionJ3 = Bodies.rectangle(180, 710, 1, 1,
         render: {
             fillStyle: "red",
             text: {
-                content: `Puntuación Jugador3: ${puntuaciones[2]}`,
+                content: ``,
                 color: TEXT_COLOR,
                 size: 20
             }
@@ -412,9 +412,9 @@ function moveAngle(position, vel, angle) {
 }
 
 function actualizarMarcadores() {
-    Composite.allBodies(engine.world).find(el => el.label == 'cont1').render.text.content = `Puntuación ${puntuacionJ1.jugador}: ${puntuaciones[0]}`;
-    Composite.allBodies(engine.world).find(el => el.label == 'cont2').render.text.content = `Puntuación ${puntuacionJ2.jugador}: ${puntuaciones[1]}`;
-    Composite.allBodies(engine.world).find(el => el.label == 'cont3').render.text.content = `Puntuación ${puntuacionJ3.jugador}: ${puntuaciones[2]}`;
+    Composite.allBodies(engine.world).find(el => el.label == 'cont1').render.text.content = `Score ${puntuacionJ1.jugador}: ${puntuaciones[0]}`;
+    Composite.allBodies(engine.world).find(el => el.label == 'cont2').render.text.content = `Score ${puntuacionJ2.jugador}: ${puntuaciones[1]}`;
+    Composite.allBodies(engine.world).find(el => el.label == 'cont3').render.text.content = `Score ${puntuacionJ3.jugador}: ${puntuaciones[2]}`;
 }
 
 //setRandVel(bola, velTot);
@@ -528,17 +528,17 @@ socket.on('cambio-usuario', (data, id) => {
     puntuacionJ3.jugador = data[2].name;
 
     puntuacionJ1.render.text = {
-        content: `Puntuación ${puntuacionJ1.jugador}: ${puntuaciones[0]}`,
+        content: `Score ${puntuacionJ1.jugador}: ${puntuaciones[0]}`,
         color: TEXT_COLOR,
         size: 20
     }
     puntuacionJ2.render.text = {
-        content: `Puntuación ${puntuacionJ2.jugador}: ${puntuaciones[1]}`,
+        content: `Score ${puntuacionJ2.jugador}: ${puntuaciones[1]}`,
         color: TEXT_COLOR,
         size: 20
     }
     puntuacionJ3.render.text = {
-        content: `Puntuación ${puntuacionJ3.jugador}: ${puntuaciones[2]}`,
+        content: `Score ${puntuacionJ3.jugador}: ${puntuaciones[2]}`,
         color: TEXT_COLOR,
         size: 20
     }

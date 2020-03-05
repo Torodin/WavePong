@@ -12,10 +12,16 @@ gameWindowMinButton.addEventListener('click', () => {
     gameWindow.classList.toggle('oculta');
 });
 
-let backAnimButton = document.getElementById('anim-button');
+let backAnimChk = document.getElementById('anim-chk');
 
-backAnimButton.addEventListener('click', () => {
+backAnimChk.addEventListener('click', () => {
     document.getElementsByTagName('body')[0].classList.toggle('animated-back');
+});
+
+let crtChk = document.getElementById('crt-chk');
+
+crtChk.addEventListener('click', () => {
+    document.getElementsByTagName('html')[0].classList.toggle('aesthetic-effect-crt');
 });
 
 let loginUser = document.getElementById('username');
@@ -30,3 +36,6 @@ loginRegButton.addEventListener('click', () => {
 loginSubButton.addEventListener('click', () => {
     socket.emit('login', idJugador, loginUser.value, loginPsw.value);
 });
+
+
+document.getElementsByTagName('audio')[0].play();

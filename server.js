@@ -160,6 +160,7 @@ io.on('connection', socket => {
 
         socket.to(partidas[partidaAsignada].nombre).emit('user-disconnect', idJugador);
         socket.leave(partidas[partidaAsignada].nombre);
+        if(partidas[partidaAsignada].jugadores!=3) partidas[partidaAsignada].jugadores--;
 
         if(partidas[partidaAsignada].jugadores<3 && partidas[partidaAsignada].playing) 
             partidas[partidaAsignada].playing = false;

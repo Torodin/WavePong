@@ -27,7 +27,7 @@
                     </button>
                 </div>
                 <div class="aesthetic-windows-95-button-title-bar">
-                    <button>
+                    <button class="only-deco">
                         X
                     </button>
                 </div>
@@ -49,7 +49,7 @@
 
             <div class="aesthetic-windows-95-modal-title-bar-controls">
                 <div class="aesthetic-windows-95-button-title-bar">
-                    <button>
+                    <button class="only-deco">
                         X
                     </button>
                 </div>
@@ -81,8 +81,8 @@
             </div>
 
             <div class="aesthetic-windows-95-modal-title-bar-controls">
-                <div class="aesthetic-windows-95-button-title-bar">
-                    <button>
+                <div class="aesthetic-windows-95-button-title-bar only-deco">
+                    <button class="only-deco">
                         X
                     </button>
                 </div>
@@ -91,9 +91,19 @@
 
         <!-- Contenido de la ventana -->
         <div class="aesthetic-windows-95-modal-content">
-            <div class="aesthetic-windows-95-button" >
-                <button id="anim-button">Activar animación fondo</button>
-            </div>
+            <label class="aesthetic-windows-95-checkbox">Animated background
+                <input id="anim-chk" type="checkbox" checked>
+                <span class="aesthetic-windows-95-checkmark"></span>
+            </label><br>
+            <label class="aesthetic-windows-95-checkbox">Crt efect
+                <input id="crt-chk" type="checkbox" checked>
+                <span class="aesthetic-windows-95-checkmark"></span>
+            </label><br>
+            <label>Music<br>
+                <audio src="./music/Interstellar Odyssey.ogg" preload controls loop>
+                    Not suported
+                </audio>
+            </label>
         </div>
     </div>
 
@@ -109,8 +119,8 @@
             <span>WavePong</span>
         </div>
 
-        <div class="aesthetic-windows-95-taskbar-services">
-            <img src="images/connected.png" alt="windows logo">
+        <div class="aesthetic-windows-95-taskbar-services only-deco">
+            <img class="only-deco" src="images/connected.png" alt="windows logo">
         </div>
     </div>
     <script src="./js/main.js"></script>
