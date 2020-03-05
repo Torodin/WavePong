@@ -1,6 +1,15 @@
+const fs = require('fs');
 const express = require('express');
 const app = express();
+
+const credentials = {
+    key: fs.readFileSync('/etc/nginx/certificados/_.wavepong.es_private_key.key'),
+    cert: fs.readFileSync('/etc/nginx/certificados/wavepong.es_ssl_certificate.cer')
+}
+
 const http = require('http').createServer(app);
+const https = require('http').createServer(credentials, app);
+
 const io = require('socket.io')(http);
 const aws = require('aws-sdk');
 const config = require('./config.js');
@@ -167,4 +176,5 @@ io.on('connection', socket => {
     });
 });
 
-http.listen(8080, () => console.log('listening on *:8080'));
+http.listen(8080, () => console.log('listening http on *:8080'));
+https.listen(8443, () => console.log('listening https on *:8443'));

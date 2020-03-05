@@ -349,10 +349,17 @@ Events.on(engine, 'collisionEnd', event => {
     }
 });
 
+let itera=0;
+
 Events.on(engine, 'beforeUpdate', event => {
-    // Controlamos que la paleta no se pase de los limites
+    itera++;
     
-    if(idJugador!=0 && lastUpdate-engine.timing.timestamp > 10){
+
+    // Controlamos que la paleta no se pase de los limites
+
+    if(idJugador!=0 && itera==12){
+        itera = 0;
+
         if(idJugador==1)
             socket.emit(
                 'colision', 
