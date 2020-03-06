@@ -357,7 +357,7 @@ Events.on(engine, 'beforeUpdate', event => {
 
     // Controlamos que la paleta no se pase de los limites
 
-    if(idJugador!=0 && itera==12){
+    if(idJugador!=0 && itera==4){
         itera = 0;
 
         if(idJugador==1)
