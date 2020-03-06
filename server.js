@@ -7,7 +7,6 @@ const credentials = {
     cert: fs.readFileSync('/etc/nginx/certificados/wavepong.es_ssl_certificate.cer')
 }
 
-const http = require('http').createServer(app);
 const https = require('https').createServer(credentials, app);
 
 const io = require('socket.io')(https);
