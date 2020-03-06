@@ -8,9 +8,9 @@ const credentials = {
 }
 
 const http = require('http').createServer(app);
-const https = require('http').createServer(credentials, app);
+const https = require('https').createServer(credentials, app);
 
-const io = require('socket.io')(http);
+const io = require('socket.io')(https);
 const aws = require('aws-sdk');
 const config = require('./config.js');
 
@@ -176,5 +176,4 @@ io.on('connection', socket => {
     });
 });
 
-http.listen(8080, () => console.log('listening http on *:8080'));
 https.listen(8443, () => console.log('listening https on *:8443'));

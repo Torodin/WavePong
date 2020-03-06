@@ -5,7 +5,7 @@ const Engine = Matter.Engine,
     Body = Matter.Body,
     Runner = Matter.Runner;
 
-const socket = io();
+const socket = io.connect();
 let idJugador = 0;
 let lastUpdate;
 
