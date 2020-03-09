@@ -17,7 +17,7 @@ body { cursor: url('../images/cursor-retro-1.png'), auto; }
 }
 
 .animated-back {
-    background-image: url("../images/animated-back.gif");
+    background-image: url("../images/animated-background.gif");
     background-repeat: no-repeat;
     background-size: cover;
 }

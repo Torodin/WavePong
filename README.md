@@ -35,14 +35,11 @@ Se trata de una versión del clasico Pong que consiste en que ahora en lugar de 
 * 0.1.0
     * Mecanicas basicas
     * Multi-jugador
-* 0.0.1
-    * Diseño en proceso
 
 ## Meta
 
-Torodin – [@diegogomezledo](https://twitter.com/diegogomezledo) – diegogomezledo@gmail.com
-Jugoro - [@jugoro0705](https://twitter.com/jugoro0705) - jugoro0705@gmail.com
+Diego Gómez Ledo - [Torodin](https://github.com/Torodin) – [@diegogomezledo](https://twitter.com/diegogomezledo) – diegogomezledo@gmail.com
 
-Distribuido bajo la licencia MIT. Ver ``LICENSE`` para más información.
+Juan González - [Jugoro](https://github.com/jugoro) - [@jugoro0705](https://twitter.com/jugoro0705) - jugoro0705@gmail.com
 
-[https://github.com/Torodin/MultiPong](https://github.com/Torodin)
+Distribuido bajo la licencia MIT. Ver [``LICENSE``](https://github.com/Torodin/WavePong/blob/master/LICENSE) para más información.

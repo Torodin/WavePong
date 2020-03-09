@@ -2,9 +2,28 @@
     "name": "pong-game",
     "version": "0.1.4",
     "description": "pong game for 3 players",
+    "main": "server.js",
+    "scripts": {
+        "dev": "nodemon server.js dev",
+        "start": "node server.js"
+    },
+    "author": {
+        "name": "Diego Gómez Ledo",
+        "email": "diegogomezledo@gmail.com",
+        "url": "https://torodin.github.io/"
+    },
+    "contributors": [
+        {
+            "name": "Juan González",
+            "email": "jugoro0705@gmail.com"
+        }
+    ],
     "dependencies": {
         "aws-sdk": "^2.631.0",
         "express": "^4.17.1",
         "socket.io": "^2.3.0"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.2"
     }
 }

@@ -1,17 +1,40 @@
-const fs = require('fs');
+const myArgs = process.argv.slice(2);
+
+// Importamos la configuracion del server
+const config = require('./config.js');
 const express = require('express');
+const socketio = require('socket.io');
+const aws = require('aws-sdk');
+
 const app = express();
 
-const credentials = {
-    key: fs.readFileSync('/etc/nginx/certificados/_.wavepong.es_private_key.key'),
-    cert: fs.readFileSync('/etc/nginx/certificados/wavepong.es_ssl_certificate.cer')
+const clientPath = `${__dirname}/client`;
+console.log(`Starting from ${clientPath}`);
+
+let server;
+
+if(myArgs.includes('dev')){
+    console.log('Development mode');
+
+    const http = require('http');
+
+    server = http.createServer(app);
+
+} else {
+    console.log('Production mode');
+
+    const fs = require('fs');
+    const https = require('https');
+
+    const credentials = {
+        key: fs.readFileSync('/etc/nginx/certificados/_.wavepong.es_private_key.key'),
+        cert: fs.readFileSync('/etc/nginx/certificados/wavepong.es_ssl_certificate.cer')
+    }
+
+    server = https.createServer(credentials, app);
 }
 
-const https = require('https').createServer(credentials, app);
-
-const io = require('socket.io')(https);
-const aws = require('aws-sdk');
-const config = require('./config.js');
+const io = socketio(server);
 
 // Clases
 
@@ -44,8 +67,8 @@ class Jugador {
     }
 }
 
-app.use(express.static(__dirname + "/"));
-app.get('/', (req, res) => res.sendFile(__dirnombre + '/index.html'));
+app.use(express.static(clientPath + "/"));
+app.get('/', (req, res) => res.sendFile(clientPath + '/index.html'));
 
 aws.config.update(config.aws_remote_config);
 
@@ -175,4 +198,6 @@ io.on('connection', socket => {
     });
 });
 
-https.listen(8443, () => console.log('listening https on *:8443'));
+server.on('error', err => console.error('Server error:', err));
+
+server.listen(8443, () => console.log('listening https on *:8443'));
