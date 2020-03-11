@@ -91,13 +91,17 @@ body { cursor: url('../images/cursor-retro-1.png'), auto; }
     margin-right: 7px;
 }
 
-#game-taskbar-button {
-    width: 130px;
-}
-
-#game-taskbar-button span{ margin: 0; }
+#game-taskbar-button { width: 135px; }
 
 #game-taskbar-button img{ width: 35px; }
+
+#login-taskbar-button { width: 90px; }
+
+#login-taskbar-button img{ width: 25px; }
+
+#options-taskbar-button { width: 110px; }
+
+#options-taskbar-button img{ width: 27px; }
 
 .infront { background-color: #E4E4E4; }
 
