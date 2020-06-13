@@ -5,6 +5,17 @@ Se trata de una versión del clasico Pong que consiste en que ahora en lugar de 
 
 ![](../header.png)
 
+## Instalación
+
+Puedes instalarlo clonando el repositorio:
+```
+git clone https://github.com/libgit2/libgit2
+```
+Y instalando los modulos con npm:
+```
+npm install
+```
+
 ## Controles
 
 | Tecla | Nombre | Función|
