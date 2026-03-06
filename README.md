@@ -3,7 +3,8 @@
 
 Se trata de una versión del clasico Pong que consiste en que ahora en lugar de 2 es para 3 jugadores y a su vez la forma tambien cambia.
 
-![](../header.png)
+<img width="1916" height="910" alt="unnamed" src="https://github.com/user-attachments/assets/1defea83-a491-427e-84d1-bbb53bf54812" />
+
 
 ## Instalación
 
